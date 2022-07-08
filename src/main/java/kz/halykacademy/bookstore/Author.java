@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Author {
     int id;
-    String surname;
-    String name;
+    String lastName;
+    String firstName;
     String patronymic;
     LocalDate dateOfBirth;
     List<Book>books;
 
     public Author(String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
-        this.surname = surname;
-        this.name = name;
+        this.lastName = surname;
+        this.firstName = name;
         this.patronymic = patronymic;
         this.dateOfBirth = dateOfBirth;
         this.books = books;
@@ -21,8 +21,8 @@ public class Author {
 
     public Author(int id, String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
         this.id = id;
-        this.surname = surname;
-        this.name = name;
+        this.lastName = surname;
+        this.firstName = name;
         this.patronymic = patronymic;
         this.dateOfBirth = dateOfBirth;
         this.books = books;
@@ -37,19 +37,19 @@ public class Author {
     }
 
     public String getSurname() {
-        return surname;
+        return lastName;
     }
 
     public void setSurname(String surname) {
-        this.surname = surname;
+        this.lastName = surname;
     }
 
     public String getName() {
-        return name;
+        return firstName;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.firstName = name;
     }
 
     public String getPatronymic() {

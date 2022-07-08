@@ -1,0 +1,546 @@
+swagger: "2.0"
+info:
+  description: "Special API for BookStore"
+  version: "1.0.0"
+  title: "BoockStore"
+  contact:
+    email: "arsenulykbekov9@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+basePath: "/v2"
+tags:
+  - name: "books"
+    description: "Everything about your books"
+  - name: "authors"
+    description: "Operations about authors"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /books:
+    post:
+      tags:
+        - "books"
+      summary: "Add a new book to the store"
+      description: ""
+      operationId: "addBook"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Book object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Book"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+    put:
+      tags:
+        - "books"
+      summary: "Update an existing book"
+      description: ""
+      operationId: "updateBook"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Pet object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Book"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+  /books/findByAuthor:
+    get:
+      tags:
+        - "books"
+      summary: "Finds Book by Author"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findPetsByID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "author"
+          in: "query"
+          description: "Status values that need to be considered for filter"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Book"
+        "400":
+          description: "Invalid status value"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+  /books/{bookId}:
+    get:
+      tags:
+        - "books"
+      summary: "Find book by ID"
+      description: "Returns a single pet"
+      operationId: "getBooktById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bookId"
+          in: "path"
+          description: "ID of pet to return"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Book"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+        - api_key: [ ]
+    post:
+      tags:
+        - "books"
+      summary: "Updates a book in the store with form data"
+      description: ""
+      operationId: "updateBookWithForm"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bookId"
+          in: "path"
+          description: "ID of book that needs to be updated"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "name"
+          in: "formData"
+          description: "Updated name of the book"
+          required: false
+          type: "string"
+        - name: "price"
+          in: "formData"
+          description: "Updated price of the book"
+          required: false
+          type: "number"
+      responses:
+        "405":
+          description: "Invalid input"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+    delete:
+      tags:
+        - "books"
+      summary: "Deletes a book"
+      description: ""
+      operationId: "deleteBook"
+      produces:
+        - "application/json"
+      parameters:
+        # - name: "api_key"
+        #   in: "header"
+        #   required: false
+        #   type: "string"
+        - name: "bookId"
+          in: "path"
+          description: "Book id to delete"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+
+  /authors:
+    post:
+      tags:
+        - "authors"
+      summary: "Create auhores"
+      operationId: "createAuhores"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Created user object"
+          required: true
+          schema:
+            $ref: "#/definitions/Author"
+      responses:
+        default:
+          description: "successful operation"
+    put:
+      tags:
+        - "authors"
+      summary: "Update an existing authors"
+      description: ""
+      operationId: "updateauthors"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Authors object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Author"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+  /authors/{authorsId}:
+    get:
+      tags:
+        - "authors"
+      summary: "Find Authors by ID"
+      description: "Returns a single pet"
+      operationId: "getAuthortById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "authorsId"
+          in: "path"
+          description: "ID of pet to return"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Book"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+        - api_key: [ ]
+
+    post:
+      tags:
+        - "authors"
+      summary: "Updates a authors in the store with form data"
+      description: ""
+      operationId: "updateAuthorsWithForm"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "authorsId"
+          in: "path"
+          description: "ID of authors that needs to be updated"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "books"
+          in: "formData"
+          description: "Updated books of the authors"
+          required: false
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "405":
+          description: "Invalid input"
+    delete:
+      tags:
+        - "authors"
+      summary: "Deletes a authors"
+      description: ""
+      operationId: "deleteAuthors"
+      produces:
+        - "application/json"
+      parameters:
+        # - name: "api_key"
+        #   in: "header"
+        #   required: false
+        #   type: "string"
+        - name: "authorsId"
+          in: "path"
+          description: "Author id to delete"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+  /publishers:
+    post:
+      tags:
+        - "publishers"
+      summary: "Add a new publishers to the store"
+      description: ""
+      operationId: "addPublishers"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "publishers object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Publisher"
+      responses:
+        "405":
+          description: "Invalid input"
+    put:
+      tags:
+        - "publishers"
+      summary: "Update an existing publishers"
+      description: ""
+      operationId: "updatePublishers"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Publishers object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Publisher"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+        "405":
+          description: "Validation exception"
+  /publishers/{publisherId}:
+    get:
+      tags:
+        - "publishers"
+      summary: "Find publishers by ID"
+      description: "Returns a single pet"
+      operationId: "getpublisherById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "publisherId"
+          in: "path"
+          description: "ID of publisher to return"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Publisher"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+      security:
+        - api_key: [ ]
+
+    post:
+      tags:
+        - "publishers"
+      summary: "Updates a publishers in the store with form data"
+      description: ""
+      operationId: "updatePublishersWithForm"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "publisherId"
+          in: "path"
+          description: "ID of publishers that needs to be updated"
+          required: true
+          type: "integer"
+          format: "int64"
+        - name: "name"
+          in: "formData"
+          description: "Updated books of the authors"
+          required: false
+          type: "string"
+      responses:
+        "405":
+          description: "Invalid input"
+    delete:
+      tags:
+        - "publishers"
+      summary: "Deletes a publishers"
+      description: ""
+      operationId: "deletePublishers"
+      produces:
+        - "application/json"
+      parameters:
+        # - name: "api_key"
+        #   in: "header"
+        #   required: false
+        #   type: "string"
+        - name: "publisherId"
+          in: "path"
+          description: "Author id to delete"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Pet not found"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:book: "modify pets in your account"
+      read:book: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+
+  Author:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      username:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      patronymic:
+        type: "string"
+      dateOfBirth:
+        format: "date"
+        type: "string"
+      books:
+        type: "array"
+        xml:
+          name: "first book"
+          wrapped: true
+        items:
+          type: "string"
+    xml:
+      name: "Author"
+  Book:
+    type: "object"
+    required:
+      - "name"
+      - "price"
+      - "authors"
+      - "publisher"
+      - "numOfpage"
+      - "yearOfIssue"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+        example: "Magic Morning"
+      authors:
+        type: "array"
+        xml:
+          name: "Ronaldo"
+          wrapped: true
+        items:
+          type: "string"
+      price:
+        type: "number"
+        example: "570.00"
+      numOfpage:
+        type: "integer"
+        format: "int64"
+        example: "632"
+      yearOfIssue:
+        type: "string"
+        format: "date"
+        example: "2008"
+    xml:
+      name: "Book"
+  Publisher:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      books:
+        type: "array"
+        xml:
+          name: "first book"
+          wrapped: true
+        items:
+          type: "string"
+    xml:
+      name: "Publisher"
+  # ApiResponse:
+  #   type: "object"
+  #   properties:
+  #     code:
+  #       type: "integer"
+  #       format: "int32"
+  #     type:
+  #       type: "string"
+  #     message:
+  #       type: "string"
+# externalDocs:
+#   description: "Find out more about Swagger"
+#   url: "http://swagger.io"
