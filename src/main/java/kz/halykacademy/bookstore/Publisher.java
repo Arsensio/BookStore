@@ -1,11 +1,14 @@
 package kz.halykacademy.bookstore;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Publisher {
+public class Publisher implements PublisherProvider {
     int id;
     String name;
-    List<Book>books;
+    List<Book> books;
+
+    List<Publisher> publishers = new ArrayList<>();
 
     public Publisher(int id, String name, List<Book> books) {
         this.id = id;
@@ -41,4 +44,23 @@ public class Publisher {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
+
+
+    @Override
+    public List<Publisher> getAll() {
+        return publishers;
+    }
+
+    public Publisher getBook(int id) {
+        return publishers.get(id);
+    }
+
+    public void putBook(Publisher publisher) {
+        publishers.add(publisher);
+    }
+
+    public void deletePublisher(int id) {
+        publishers.remove(id);
+    }
+
 }

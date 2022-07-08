@@ -1,16 +1,19 @@
 package kz.halykacademy.bookstore;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Book {
+public class Book implements BookProvider {
     int id;
     double price;
-    List<Author>authors;
+    List<Author> authors;
     String publisher;
     String name;
     int numOfpage;
     LocalDate yearOfIssue;
+
+    List<Book> books = new ArrayList<>();
 
     public Book(double price, List<Author> authors, String publisher, String name, int numOfpage, LocalDate yearOfIssue) {
         this.price = price;
@@ -86,4 +89,24 @@ public class Book {
     public void setYearOfIssue(LocalDate yearOfIssue) {
         this.yearOfIssue = yearOfIssue;
     }
+
+
+    @Override
+    public List<Book> getAll() {
+        return books;
+    }
+
+    public Book getBook(int id) {
+        return books.get(id);
+    }
+
+    public void putBook(Book book) {
+        books.add(book);
+    }
+
+    public void deleteBook(int id) {
+        books.remove(id);
+    }
+
+
 }

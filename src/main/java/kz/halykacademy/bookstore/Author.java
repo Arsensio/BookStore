@@ -1,15 +1,18 @@
 package kz.halykacademy.bookstore;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Author {
+public class Author implements AuthorProvider {
     int id;
     String lastName;
     String firstName;
     String patronymic;
     LocalDate dateOfBirth;
-    List<Book>books;
+    List<Book> books;
+
+    List<Author> authorMap = new ArrayList<>();
 
     public Author(String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
         this.lastName = surname;
@@ -74,5 +77,22 @@ public class Author {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    @Override
+    public List<Author> getAll() {
+        return authorMap;
+    }
+
+    public Author getAuthor(int id) {
+        return authorMap.get(id);
+    }
+
+    public void putAuthor(Author author) {
+        authorMap.add(author);
+    }
+
+    public void deleteAuthor(int id) {
+        authorMap.remove(id);
     }
 }
