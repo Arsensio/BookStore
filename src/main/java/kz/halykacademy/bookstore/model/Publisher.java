@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
-import kz.halykacademy.bookstore.PublisherProvider;
+import kz.halykacademy.bookstore.provider.interfaces.PublisherProvider;
 
 import java.util.ArrayList;
 import java.util.List;

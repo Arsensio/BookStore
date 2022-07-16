@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore;
+package kz.halykacademy.bookstore.provider.interfaces;
 
 import kz.halykacademy.bookstore.model.Author;
 

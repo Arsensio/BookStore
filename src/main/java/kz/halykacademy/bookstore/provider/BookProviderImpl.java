@@ -1,6 +1,7 @@
-package kz.halykacademy.bookstore;
+package kz.halykacademy.bookstore.provider;
 
 import kz.halykacademy.bookstore.model.Book;
+import kz.halykacademy.bookstore.provider.interfaces.BookProvider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,6 +13,16 @@ public class BookProviderImpl implements BookProvider {
     @Override
     public Book get(Long id) {
         return books.get(Math.toIntExact(id));
+    }
+
+    @Override
+    public List<Book> get(String bookName) {
+        List<Book> booksWithName = books
+                .stream()
+                .filter(name -> name.getName().contains(bookName))
+                .collect(Collectors.toList());
+
+        return booksWithName;
     }
 
     @Override
@@ -36,6 +47,6 @@ public class BookProviderImpl implements BookProvider {
 
     @Override
     public void delete(Book book) {
-        books.set(Math.toIntExact(book.getId()), book);
+        books.set(Math.toIntExact(book.getId()), null);
     }
 }

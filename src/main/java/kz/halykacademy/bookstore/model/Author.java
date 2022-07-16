@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
-import kz.halykacademy.bookstore.AuthorProvider;
+import kz.halykacademy.bookstore.provider.interfaces.AuthorProvider;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,12 +1,10 @@
 package kz.halykacademy.bookstore.service;
 
 
-import kz.halykacademy.bookstore.BookProvider;
+import kz.halykacademy.bookstore.provider.interfaces.BookProvider;
 import kz.halykacademy.bookstore.model.Book;
 import kz.halykacademy.bookstore.service.interfaces.BookService;
-import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
