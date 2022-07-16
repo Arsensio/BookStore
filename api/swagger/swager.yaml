@@ -77,11 +77,41 @@ paths:
         - "books"
       summary: "Finds Book by Author"
       description: "Multiple status values can be provided with comma separated strings"
-      operationId: "findPetsByID"
+      operationId: "findBookByAuthor"
       produces:
         - "application/json"
       parameters:
         - name: "author"
+          in: "query"
+          description: "Status values that need to be considered for filter"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Book"
+        "400":
+          description: "Invalid status value"
+      security:
+        - petstore_auth:
+            - "write:book"
+            - "read:book"
+  /books/name:
+    get:
+      tags:
+        - "books"
+      summary: "Finds Book by name"
+      description: "Multiple status values can be provided with comma separated strings"
+      operationId: "findBooksByName"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "name"
           in: "query"
           description: "Status values that need to be considered for filter"
           required: true
@@ -127,7 +157,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-        - api_key: [ ]
+        - api_key: []
     post:
       tags:
         - "books"
@@ -263,7 +293,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-        - api_key: [ ]
+        - api_key: []
 
     post:
       tags:
@@ -387,7 +417,7 @@ paths:
         "404":
           description: "Pet not found"
       security:
-        - api_key: [ ]
+        - api_key: []
 
     post:
       tags:
