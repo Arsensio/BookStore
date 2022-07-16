@@ -1,11 +1,13 @@
-package kz.halykacademy.bookstore;
+package kz.halykacademy.bookstore.model;
+
+import kz.halykacademy.bookstore.BookProvider;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book implements BookProvider {
-    int id;
+public class Book  {
+    Long id;
     double price;
     List<Author> authors;
     String publisher;
@@ -13,7 +15,6 @@ public class Book implements BookProvider {
     int numOfpage;
     LocalDate yearOfIssue;
 
-    List<Book> books = new ArrayList<>();
 
     public Book(double price, List<Author> authors, String publisher, String name, int numOfpage, LocalDate yearOfIssue) {
         this.price = price;
@@ -24,7 +25,7 @@ public class Book implements BookProvider {
         this.yearOfIssue = yearOfIssue;
     }
 
-    public Book(int id, double price, List<Author> authors, String publisher, String name, int numOfpage, LocalDate yearOfIssue) {
+    public Book(Long id, double price, List<Author> authors, String publisher, String name, int numOfpage, LocalDate yearOfIssue) {
         this.id = id;
         this.price = price;
         this.authors = authors;
@@ -34,11 +35,11 @@ public class Book implements BookProvider {
         this.yearOfIssue = yearOfIssue;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -90,23 +91,6 @@ public class Book implements BookProvider {
         this.yearOfIssue = yearOfIssue;
     }
 
-
-    @Override
-    public List<Book> getAll() {
-        return books;
-    }
-
-    public Book getBook(int id) {
-        return books.get(id);
-    }
-
-    public void putBook(Book book) {
-        books.add(book);
-    }
-
-    public void deleteBook(int id) {
-        books.remove(id);
-    }
 
 
 }

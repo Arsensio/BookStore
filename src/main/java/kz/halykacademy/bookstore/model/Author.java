@@ -1,11 +1,13 @@
-package kz.halykacademy.bookstore;
+package kz.halykacademy.bookstore.model;
+
+import kz.halykacademy.bookstore.AuthorProvider;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Author implements AuthorProvider {
-    int id;
+    Long id;
     String lastName;
     String firstName;
     String patronymic;
@@ -22,7 +24,7 @@ public class Author implements AuthorProvider {
         this.books = books;
     }
 
-    public Author(int id, String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
+    public Author(Long id, String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
         this.id = id;
         this.lastName = surname;
         this.firstName = name;
@@ -31,11 +33,11 @@ public class Author implements AuthorProvider {
         this.books = books;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

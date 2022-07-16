@@ -1,16 +1,18 @@
-package kz.halykacademy.bookstore;
+package kz.halykacademy.bookstore.model;
+
+import kz.halykacademy.bookstore.PublisherProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Publisher implements PublisherProvider {
-    int id;
+    Long id;
     String name;
     List<Book> books;
 
     List<Publisher> publishers = new ArrayList<>();
 
-    public Publisher(int id, String name, List<Book> books) {
+    public Publisher(Long id, String name, List<Book> books) {
         this.id = id;
         this.name = name;
         this.books = books;
@@ -21,11 +23,11 @@ public class Publisher implements PublisherProvider {
         this.books = books;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
