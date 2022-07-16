@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Author implements AuthorProvider {
+public class Author {
     Long id;
     String lastName;
     String firstName;
@@ -14,7 +14,6 @@ public class Author implements AuthorProvider {
     LocalDate dateOfBirth;
     List<Book> books;
 
-    List<Author> authorMap = new ArrayList<>();
 
     public Author(String surname, String name, String patronymic, LocalDate dateOfBirth, List<Book> books) {
         this.lastName = surname;
@@ -81,20 +80,5 @@ public class Author implements AuthorProvider {
         this.books = books;
     }
 
-    @Override
-    public List<Author> getAll() {
-        return authorMap;
-    }
 
-    public Author getAuthor(int id) {
-        return authorMap.get(id);
-    }
-
-    public void putAuthor(Author author) {
-        authorMap.add(author);
-    }
-
-    public void deleteAuthor(int id) {
-        authorMap.remove(id);
-    }
 }

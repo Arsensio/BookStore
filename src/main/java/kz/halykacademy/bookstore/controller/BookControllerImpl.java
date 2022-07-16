@@ -3,6 +3,7 @@ package kz.halykacademy.bookstore.controller;
 import kz.halykacademy.bookstore.controller.interfaces.BookController;
 import kz.halykacademy.bookstore.service.BookServiceImpl;
 import kz.halykacademy.bookstore.model.Book;
+import kz.halykacademy.bookstore.service.interfaces.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.ui.Model;
@@ -13,10 +14,10 @@ import java.util.List;
 public class BookControllerImpl implements BookController {
 
     @Autowired
-    private BookServiceImpl service;
+    private BookService service;
 
 
-    public BookControllerImpl(BookServiceImpl service) {
+    public BookControllerImpl(BookService service) {
         this.service = service;
     }
 
@@ -44,6 +45,18 @@ public class BookControllerImpl implements BookController {
 
 
         return "book/form";
+    }
+
+    @Override
+    public String getByName(String name, Model model) {
+        List<Book> books = service.getByName(name);
+
+        model.addAttribute("mode", "Update");
+        model.addAttribute("modeTitle", "UpdateExisting");
+        model.addAttribute("isUpdate", true);
+        model.addAttribute("book", books);
+
+        return "book/formName";
     }
 //
 //    @Override

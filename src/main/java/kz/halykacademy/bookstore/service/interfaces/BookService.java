@@ -12,6 +12,8 @@ public interface BookService {
 
     public Book getOne(Long id);
 
+    public List<Book>getByName(String name);
+
 //    public Book save(Book book);
 //
 //    public void delete(Long id);

@@ -24,6 +24,9 @@ public interface BookController {
     @GetMapping("/{id}")
     String getOne(@PathVariable Long id, Model model);
 
+    @GetMapping("/name")
+    String getByName(@PathVariable String name, Model model);
+
 //
 //    @GetMapping("/new")
 //    String newBookForm(Model model);

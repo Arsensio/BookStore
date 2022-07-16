@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+
 public class BookServiceImpl implements BookService {
 
     @Autowired
@@ -29,6 +29,12 @@ public class BookServiceImpl implements BookService {
     public Book getOne(Long id){
         return provider.get(id);
     }
+
+    @Override
+    public List<Book> getByName(String name) {
+        return provider.get(name);
+    }
+
 
 //    public Book save(@NonNull final Book book) {
 //        Book existing = repository.getOne(book.getId());

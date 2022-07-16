@@ -5,12 +5,11 @@ import kz.halykacademy.bookstore.provider.interfaces.PublisherProvider;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Publisher implements PublisherProvider {
+public class Publisher  {
     Long id;
     String name;
     List<Book> books;
 
-    List<Publisher> publishers = new ArrayList<>();
 
     public Publisher(Long id, String name, List<Book> books) {
         this.id = id;
@@ -47,22 +46,5 @@ public class Publisher implements PublisherProvider {
         this.books = books;
     }
 
-
-    @Override
-    public List<Publisher> getAll() {
-        return publishers;
-    }
-
-    public Publisher getBook(int id) {
-        return publishers.get(id);
-    }
-
-    public void putBook(Publisher publisher) {
-        publishers.add(publisher);
-    }
-
-    public void deletePublisher(int id) {
-        publishers.remove(id);
-    }
 
 }
