@@ -1,21 +1,22 @@
 package kz.halykacademy.bookstore.provider.interfaces;
 
-import kz.halykacademy.bookstore.model.Book;
-import kz.halykacademy.bookstore.model.Publisher;
+import kz.halykacademy.bookstore.model.PublisherEntity;
+import kz.halykacademy.bookstore.model.PublisherEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 public interface PublisherProvider {
 
-    public List<Publisher> getAll();
+    public List<PublisherEntity> getAll();
 
-    public Publisher get(Long id);
+    public PublisherEntity get(Long id);
 
-    public List<Publisher> get(String publisherName);
+    public List<PublisherEntity> get(String publisherName);
 
-    public Long save(Publisher publisher);
+    public Long save(PublisherEntity publisher);
 
-    public void update(Publisher publisher);
+    public void update(PublisherEntity publisher);
 
-    public void delete(Publisher publisher);
+    public void delete(PublisherEntity publisher);
 }

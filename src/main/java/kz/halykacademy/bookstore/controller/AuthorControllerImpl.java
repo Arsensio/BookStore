@@ -1,56 +1,47 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.controller.interfaces.AuthorController;
-import kz.halykacademy.bookstore.model.Author;
-import kz.halykacademy.bookstore.model.Book;
+import kz.halykacademy.bookstore.model.AuthorEntity;
 import kz.halykacademy.bookstore.service.interfaces.AuthorService;
-import org.springframework.ui.Model;
+import kz.halykacademy.bookstore.web.author.AuthorDTO;
+import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-public class AuthorControllerImpl implements AuthorController {
+@RestController
+@AllArgsConstructor
+@RequestMapping("/authors")
+public class AuthorControllerImpl {
 
+    @Autowired
     AuthorService authorService;
 
-    public AuthorControllerImpl(AuthorService authorService) {
-        this.authorService = authorService;
+    @GetMapping
+    public List<AuthorDTO> listAll() {
+        return authorService.findAll();
     }
 
-    @Override
-    public String listAll(Model model) {
-        return returnList(model);
+    @GetMapping("/{id}")
+    public AuthorDTO getOne(@PathVariable Long id) throws Throwable {
+        return authorService.findOne(id);
     }
 
-    private String returnList(Model model) {
-        List<Author> authors = authorService.listAll();
-        System.out.println(authors);
-
-        model.addAttribute("authors", authors);
-        return "author/list";
+    @GetMapping("/{name}")
+    public List<AuthorDTO> getByName(@PathVariable String name) {
+        System.out.println(name);
+        return authorService.findByName(name);
     }
 
-    @Override
-    public String getOne(Long id, Model model) {
-        Author author = authorService.getOne(id);
-
-        model.addAttribute("mode", "Update");
-        model.addAttribute("modeTitle", "UpdateExisting");
-        model.addAttribute("isUpdate", true);
-        model.addAttribute("book", author);
-
-
-        return "author/form";
+    @PostMapping
+    public AuthorDTO save(@RequestBody SaveAuthorDTO saveAuthor){
+        return authorService.save(saveAuthor);
     }
 
-    @Override
-    public String getByName(String name, Model model) {
-        List<Author> books = authorService.getByName(name);
-
-        model.addAttribute("mode", "Update");
-        model.addAttribute("modeTitle", "UpdateExisting");
-        model.addAttribute("isUpdate", true);
-        model.addAttribute("book", books);
-
-        return "author/formName";
+    @DeleteMapping
+    public void delete(@RequestBody Long id){
+        authorService.delete(id);
     }
 }

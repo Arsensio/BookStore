@@ -1,21 +1,21 @@
 package kz.halykacademy.bookstore.provider.interfaces;
 
-import kz.halykacademy.bookstore.model.Book;
+import kz.halykacademy.bookstore.model.BookEntity;
 
 import java.util.List;
 
 public interface BookProvider {
 
-    public List<Book> getAll();
+    public List<BookEntity> getAll();
 
-    public Book get(Long id);
+    public BookEntity get(Long id);
 
-    public List<Book> get(String bookName);
+    public List<BookEntity> get(String bookName);
 
-    public Long save(Book book);
+    public Long save(BookEntity book);
 
-    public void update(Book book);
+    public void update(BookEntity book);
 
-    public void delete(Book book);
+    public void delete(BookEntity book);
 
 }

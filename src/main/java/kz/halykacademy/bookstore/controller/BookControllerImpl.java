@@ -1,120 +1,56 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.controller.interfaces.BookController;
-import kz.halykacademy.bookstore.service.BookServiceImpl;
-import kz.halykacademy.bookstore.model.Book;
 import kz.halykacademy.bookstore.service.interfaces.BookService;
+import kz.halykacademy.bookstore.web.books.BookDTO;
+import kz.halykacademy.bookstore.web.books.SaveBookDTO;
+import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
+import kz.halykacademy.bookstore.web.publishers.SavePublisherDTO;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
 
-public class BookControllerImpl implements BookController {
+@RestController
+@AllArgsConstructor
+@RequestMapping("/books")
+public class BookControllerImpl   {
 
     @Autowired
-    private BookService service;
+    private BookService service ;
 
 
-    public BookControllerImpl(BookService service) {
-        this.service = service;
+    @GetMapping
+    public List<BookDTO> listAll() {
+        List<BookDTO> books = service.findAll();
+
+        return books ;
     }
 
-    @Override
-    public String listAll(Model model) {
-        return returnList(model);
+    @GetMapping("/{id}")
+    public BookDTO getOne(@PathVariable Long id) throws Throwable {
+        BookDTO book = service.findOne(id);
+
+        return book;
     }
 
-    private String returnList(Model model) {
-        List<Book> books = service.listAll();
-        System.out.println(books);
+//    @GetMapping("/name")
 
-        model.addAttribute("books", books);
-        return "book/list";
+    @PostMapping
+    public BookDTO save(@RequestBody SaveBookDTO saveBook) {
+        return service.save(saveBook);
     }
 
-    @Override
-    public String getOne(Long id, Model model) {
-        Book book = service.getOne(id);
-
-        model.addAttribute("mode", "Update");
-        model.addAttribute("modeTitle", "UpdateExisting");
-        model.addAttribute("isUpdate", true);
-        model.addAttribute("book", book);
-
-
-        return "book/form";
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 
-    @Override
-    public String getByName(String name, Model model) {
-        List<Book> books = service.getByName(name);
-
-        model.addAttribute("mode", "Update");
-        model.addAttribute("modeTitle", "UpdateExisting");
-        model.addAttribute("isUpdate", true);
-        model.addAttribute("book", books);
-
-        return "book/formName";
-    }
-//
-//    @Override
-//    public String newBookForm(Model model) {
-//        model.addAttribute("mode", "New");
-//        model.addAttribute("modeTitle", "Add new");
-//        model.addAttribute("isUpdate", false);
-//        return "book/form";
+//    @GetMapping("/search")
+//    public List<BookDTO> findByParameters(@RequestParam("author_id") Long authorId ){
+//        return service.findByAuthor(authorId);
 //    }
-//
-//    @Override
-//    public String save(MultipartFile image, Book book, Model model) {
-//        Book saved = service.save(book);
-//
-//        if (!image.isEmpty())
-//            write(image, saved.getId() + "");
-//
-//        return "redirect:book";
-//    }
-//
-//    @Override
-//    public String delete(Long id, Model model) {
-//        service.delete(id);
-//        return returnList(model);
-//    }
-//
-//    @Override
-//    public HttpEntity<FileSystemResource> image(Long id) {
-//        FileSystemResource fileSystemResource = read(id + "");
-//
-//        HttpHeaders header = new HttpHeaders();
-//        header.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        header.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + id);
-//
-//        return new HttpEntity(fileSystemResource, header);
-//    }
-//
-
-//
-//    public String write(MultipartFile file, String fileName) {
-//
-//        String folderPath = System.getProperty("user.home");
-//        String filePath = folderPath + "/Pictures/" + fileName;
-//
-//        try {
-//            Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return filePath;
-//    }
-//
-//    private FileSystemResource read(String fileName) {
-//        String folderPath = System.getProperty("user.home");
-//        String filePath = folderPath + "/Pictures/" + fileName;
-//
-//        return new FileSystemResource(new File(filePath));
-//    }
-
-
 }

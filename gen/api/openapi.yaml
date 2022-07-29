@@ -1,0 +1,604 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: arsenulykbekov9@gmail.com
+  description: Special API for BookStore
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: BoockStore
+  version: 1.0.0
+servers:
+- url: /v2
+tags:
+- description: Everything about your books
+  name: books
+- description: Operations about authors
+  name: authors
+paths:
+  /books:
+    post:
+      operationId: addBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        description: Book object that needs to be added to the store
+        required: true
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Add a new book to the store
+      tags:
+      - books
+      x-codegen-request-body-name: body
+      x-contentType: application/json
+      x-accepts: application/json
+    put:
+      operationId: updateBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+        description: Pet object that needs to be added to the store
+        required: true
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+        "405":
+          content: {}
+          description: Validation exception
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Update an existing book
+      tags:
+      - books
+      x-codegen-request-body-name: body
+      x-contentType: application/json
+      x-accepts: application/json
+  /books/findByAuthor:
+    get:
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findBookByAuthor
+      parameters:
+      - description: Status values that need to be considered for filter
+        explode: false
+        in: query
+        name: author
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+                type: array
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid status value
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Finds Book by Author
+      tags:
+      - books
+      x-accepts: application/json
+  /books/name:
+    get:
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findBooksByName
+      parameters:
+      - description: Status values that need to be considered for filter
+        explode: false
+        in: query
+        name: name
+        required: true
+        schema:
+          items:
+            type: string
+          type: array
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Book'
+                type: array
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid status value
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Finds Book by name
+      tags:
+      - books
+      x-accepts: application/json
+  /books/{bookId}:
+    delete:
+      operationId: deleteBook
+      parameters:
+      - description: Book id to delete
+        in: path
+        name: bookId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Deletes a book
+      tags:
+      - books
+      x-accepts: application/json
+    get:
+      description: Returns a single pet
+      operationId: getBooktById
+      parameters:
+      - description: ID of pet to return
+        in: path
+        name: bookId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      security:
+      - api_key: []
+      summary: Find book by ID
+      tags:
+      - books
+      x-accepts: application/json
+    post:
+      operationId: updateBookWithForm
+      parameters:
+      - description: ID of book that needs to be updated
+        in: path
+        name: bookId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                name:
+                  description: Updated name of the book
+                  type: string
+                price:
+                  description: Updated price of the book
+                  type: number
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Updates a book in the store with form data
+      tags:
+      - books
+      x-contentType: application/x-www-form-urlencoded
+      x-accepts: application/json
+  /authors:
+    post:
+      operationId: createAuhores
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/Author'
+        description: Created user object
+        required: true
+      responses:
+        default:
+          content: {}
+          description: successful operation
+      summary: Create auhores
+      tags:
+      - authors
+      x-codegen-request-body-name: body
+      x-contentType: '*/*'
+      x-accepts: application/json
+    put:
+      operationId: updateauthors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Author'
+        description: Authors object that needs to be added to the store
+        required: true
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+        "405":
+          content: {}
+          description: Validation exception
+      security:
+      - petstore_auth:
+        - write:book
+        - read:book
+      summary: Update an existing authors
+      tags:
+      - authors
+      x-codegen-request-body-name: body
+      x-contentType: application/json
+      x-accepts: application/json
+  /authors/{authorsId}:
+    delete:
+      operationId: deleteAuthors
+      parameters:
+      - description: Author id to delete
+        in: path
+        name: authorsId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      summary: Deletes a authors
+      tags:
+      - authors
+      x-accepts: application/json
+    get:
+      description: Returns a single pet
+      operationId: getAuthortById
+      parameters:
+      - description: ID of pet to return
+        in: path
+        name: authorsId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      security:
+      - api_key: []
+      summary: Find Authors by ID
+      tags:
+      - authors
+      x-accepts: application/json
+    post:
+      operationId: updateAuthorsWithForm
+      parameters:
+      - description: ID of authors that needs to be updated
+        in: path
+        name: authorsId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                books:
+                  description: Updated books of the authors
+                  items:
+                    type: string
+                  type: array
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Updates a authors in the store with form data
+      tags:
+      - authors
+      x-contentType: application/x-www-form-urlencoded
+      x-accepts: application/json
+  /publishers:
+    post:
+      operationId: addPublishers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publisher'
+        description: publishers object that needs to be added to the store
+        required: true
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Add a new publishers to the store
+      tags:
+      - publishers
+      x-codegen-request-body-name: body
+      x-contentType: application/json
+      x-accepts: application/json
+    put:
+      operationId: updatePublishers
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Publisher'
+        description: Publishers object that needs to be added to the store
+        required: true
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+        "405":
+          content: {}
+          description: Validation exception
+      summary: Update an existing publishers
+      tags:
+      - publishers
+      x-codegen-request-body-name: body
+      x-contentType: application/json
+      x-accepts: application/json
+  /publishers/{publisherId}:
+    delete:
+      operationId: deletePublishers
+      parameters:
+      - description: Author id to delete
+        in: path
+        name: publisherId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      summary: Deletes a publishers
+      tags:
+      - publishers
+      x-accepts: application/json
+    get:
+      description: Returns a single pet
+      operationId: getpublisherById
+      parameters:
+      - description: ID of publisher to return
+        in: path
+        name: publisherId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publisher'
+          description: successful operation
+        "400":
+          content: {}
+          description: Invalid ID supplied
+        "404":
+          content: {}
+          description: Pet not found
+      security:
+      - api_key: []
+      summary: Find publishers by ID
+      tags:
+      - publishers
+      x-accepts: application/json
+    post:
+      operationId: updatePublishersWithForm
+      parameters:
+      - description: ID of publishers that needs to be updated
+        in: path
+        name: publisherId
+        required: true
+        schema:
+          format: int64
+          type: integer
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              properties:
+                name:
+                  description: Updated books of the authors
+                  type: string
+      responses:
+        "405":
+          content: {}
+          description: Invalid input
+      summary: Updates a publishers in the store with form data
+      tags:
+      - publishers
+      x-contentType: application/x-www-form-urlencoded
+      x-accepts: application/json
+components:
+  schemas:
+    Author:
+      example:
+        firstName: firstName
+        lastName: lastName
+        patronymic: patronymic
+        books:
+        - books
+        - books
+        dateOfBirth: 2000-01-23
+        id: 0
+        username: username
+      properties:
+        id:
+          format: int64
+          type: integer
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        patronymic:
+          type: string
+        dateOfBirth:
+          format: date
+          type: string
+        books:
+          items:
+            type: string
+          type: array
+          xml:
+            name: first book
+            wrapped: true
+      type: object
+      xml:
+        name: Author
+    Book:
+      example:
+        numOfpage: 632
+        price: 570.0
+        name: Magic Morning
+        id: 0
+        yearOfIssue: 2000-01-23
+        authors:
+        - authors
+        - authors
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          example: Magic Morning
+          type: string
+        authors:
+          items:
+            type: string
+          type: array
+          xml:
+            name: Ronaldo
+            wrapped: true
+        price:
+          example: 570.0
+          type: number
+        numOfpage:
+          example: 632
+          format: int64
+          type: integer
+        yearOfIssue:
+          format: date
+          type: string
+      required:
+      - authors
+      - name
+      - numOfpage
+      - price
+      - yearOfIssue
+      type: object
+      xml:
+        name: Book
+    Publisher:
+      example:
+        books:
+        - books
+        - books
+        name: name
+        id: 0
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        books:
+          items:
+            type: string
+          type: array
+          xml:
+            name: first book
+            wrapped: true
+      type: object
+      xml:
+        name: Publisher
+  securitySchemes:
+    petstore_auth:
+      flows:
+        implicit:
+          authorizationUrl: http://petstore.swagger.io/oauth/dialog
+          scopes:
+            write:book: modify pets in your account
+            read:book: read your pets
+      type: oauth2
+    api_key:
+      in: header
+      name: api_key
+      type: apiKey
+x-original-swagger-version: "2.0"
+

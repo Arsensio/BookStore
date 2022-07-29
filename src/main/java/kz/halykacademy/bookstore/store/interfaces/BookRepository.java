@@ -1,16 +1,18 @@
 package kz.halykacademy.bookstore.store.interfaces;
 
-import kz.halykacademy.bookstore.model.Book;
+import kz.halykacademy.bookstore.model.AuthorEntity;
+import kz.halykacademy.bookstore.model.BookEntity;
+import kz.halykacademy.bookstore.web.books.BookDTO;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
-public interface BookRepository {
+import java.util.stream.Stream;
 
-    List<Book>listAll();
+@Repository
+public interface BookRepository extends JpaRepository<BookEntity,Long> {
 
-    Book getOne(long id);
+    Stream<BookDTO> findAllByAuthorId(Long authorId);
 
-    Book save(Book book);
-
-    void delete(long id);
+    Stream<BookDTO> findAllByAuthor(AuthorEntity author);
 }
