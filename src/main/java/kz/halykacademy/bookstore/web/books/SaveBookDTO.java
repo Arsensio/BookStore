@@ -3,8 +3,10 @@ package kz.halykacademy.bookstore.web.books;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import kz.halykacademy.bookstore.model.AuthorEntity;
+import kz.halykacademy.bookstore.model.GenreEntity;
 import kz.halykacademy.bookstore.model.PublisherEntity;
 import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
+import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.relational.core.sql.In;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -23,13 +26,12 @@ import java.util.List;
 public class SaveBookDTO {
     private Long id;
     private double price;
-
-    private Long publisher;
+    private PublisherEntity publisher;
     private String name;
     private int numOfPage;
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private LocalDate yearOfIssue;
+    @Min(1700)
+    private Integer yearOfIssue;
     private List<AuthorEntity>authors;
+    private List<GenreEntity>genres;
 
 }

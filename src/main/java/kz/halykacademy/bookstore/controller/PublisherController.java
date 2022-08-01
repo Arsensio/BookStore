@@ -35,12 +35,18 @@ public class PublisherController {
     }
 
     @GetMapping("/name")
-    public List<PublisherEntity> getByName(@PathVariable String name) {
+    public List<PublisherDTO> getByName(@RequestParam("name")String name) {
         return service.getByName(name);
     }
+
 
     @PostMapping
     public PublisherDTO save(@RequestBody SavePublisherDTO savePublisher) {
         return service.save(savePublisher);
+    }
+
+    @PutMapping("/{id}")
+    public PublisherDTO update(@PathVariable Long id,@RequestBody SavePublisherDTO savePublisherDTO){
+        return service.update(id,savePublisherDTO);
     }
 }

@@ -19,7 +19,7 @@ public class BookDTO {
 
     private double price;
 
-    private Long publisher;
+    private String publisher;
 
     private String name;
 
@@ -27,6 +27,7 @@ public class BookDTO {
 
     private List<String> authorName;
 
-    private LocalDate yearOfIssue;
+    private Integer yearOfIssue;
 
+    private List<String>genres;
 }

@@ -3,6 +3,7 @@ package kz.halykacademy.bookstore.model;
 import kz.halykacademy.bookstore.web.books.BookDTO;
 import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@DynamicUpdate
 @Table(name = "publishers")
 public class PublisherEntity  {
     @Id
@@ -23,6 +25,10 @@ public class PublisherEntity  {
     @Column(name = "publishers_name",nullable = false)
     String name;
 
+    public PublisherEntity(Long id, String name){
+        this.id = id;
+        this.name = name;
+    }
 
     @OneToMany(mappedBy = "publisher", fetch = FetchType.LAZY)
     List<BookEntity> books = new ArrayList<>();
@@ -33,9 +39,9 @@ public class PublisherEntity  {
     }
 
     public PublisherDTO toDTO(){
-        List<BookDTO>booksDTOList = List.of();
+        List<String>booksDTOList = List.of();
         if (this.books != null){
-            booksDTOList = this.books.stream().map(BookEntity::toDto).toList();
+            booksDTOList = this.books.stream().map(BookEntity::getName).toList();
         }
         return new PublisherDTO(
                 this.id,
@@ -44,6 +50,7 @@ public class PublisherEntity  {
         );
 
     }
+
 
     @Override
     public String toString() {

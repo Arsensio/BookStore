@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.controller;
 
+import kz.halykacademy.bookstore.model.BookEntity;
 import kz.halykacademy.bookstore.service.interfaces.BookService;
 import kz.halykacademy.bookstore.web.books.BookDTO;
 import kz.halykacademy.bookstore.web.books.SaveBookDTO;
@@ -37,16 +38,26 @@ public class BookControllerImpl   {
         return book;
     }
 
-//    @GetMapping("/name")
+    @GetMapping("/name")
+    public List<BookDTO> getByName(@RequestParam("name") String name) throws Throwable {
+        System.out.println(name);
+        return service.findOneByName(name);
+    }
+
 
     @PostMapping
-    public BookDTO save(@RequestBody SaveBookDTO saveBook) {
+    public BookEntity save(@RequestBody SaveBookDTO saveBook) {
         return service.save(saveBook);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @PutMapping("/{id}")
+    public BookDTO update(@RequestBody Long id, @RequestBody SaveBookDTO saveBookDTO ){
+       return service.update(id,saveBookDTO);
     }
 
 //    @GetMapping("/search")

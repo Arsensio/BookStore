@@ -1,19 +1,20 @@
-package kz.halykacademy.bookstore.web.publishers;
+package kz.halykacademy.bookstore.web.genre;
 
-import kz.halykacademy.bookstore.model.BookEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class SavePublisherDTO  {
+public class SaveGenreDTO {
     Long id;
     String name;
-    List<BookEntity>books;
+
+   public SaveGenreDTO(String name){
+        this.name = name;
+    }
 }

@@ -29,10 +29,10 @@ public class AuthorControllerImpl {
         return authorService.findOne(id);
     }
 
-    @GetMapping("/{name}")
-    public List<AuthorDTO> getByName(@PathVariable String name) {
+    @GetMapping("/name")
+    public List<AuthorDTO> getByName(@RequestParam("name") String name) {
         System.out.println(name);
-        return authorService.findByName(name);
+        return authorService.findAllByFirstName(name);
     }
 
     @PostMapping
@@ -40,8 +40,8 @@ public class AuthorControllerImpl {
         return authorService.save(saveAuthor);
     }
 
-    @DeleteMapping
-    public void delete(@RequestBody Long id){
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
         authorService.delete(id);
     }
 }
