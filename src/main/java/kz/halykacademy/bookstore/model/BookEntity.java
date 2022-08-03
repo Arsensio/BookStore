@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.books.BookDTO;
 import lombok.AllArgsConstructor;
@@ -30,8 +31,8 @@ public class BookEntity {
     double price;
 
 
-    @ManyToOne
-    @JoinColumn(name = "publisher_id",nullable = true)
+    @ManyToOne()
+    @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     PublisherEntity publisher;
 
     @Column(name = "book_name")
@@ -46,17 +47,17 @@ public class BookEntity {
     Integer yearOfIssue;
 
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany()
     @JoinTable(name="author_book_table",
             joinColumns={@JoinColumn(name="book_id")},
             inverseJoinColumns={@JoinColumn(name="author_id")})
-    List<AuthorEntity> author;
+    List<AuthorEntity> authors;
 
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name="book_genre_table",
-            joinColumns={@JoinColumn(name="book_id")},
-            inverseJoinColumns={@JoinColumn(name="genre_id")})
+        @ManyToMany()
+        @JoinTable(name="book_genre_table",
+                joinColumns={@JoinColumn(name="book_id")},
+                inverseJoinColumns={@JoinColumn(name="genre_id")})
     List<GenreEntity>genres;
 
 
@@ -64,8 +65,8 @@ public class BookEntity {
 
     public BookDTO toDto() {
         List<String>authorDTOList = List.of();
-        if (this.author != null){
-            authorDTOList = this.author.stream().map(AuthorEntity::getFullName).toList();
+        if (this.authors != null){
+            authorDTOList = this.authors.stream().map(AuthorEntity::getFullName).toList();
         }
         String publisherName = "";
         if (this.publisher!= null){
@@ -96,7 +97,7 @@ public class BookEntity {
         return "Book{" +
                 "id=" + id +
                 ", price=" + price +
-                ", authors=" + author +
+                ", authors=" + authors +
                 ", publisher='" + publisher + '\'' +
                 ", name='" + name + '\'' +
                 ", numOfpage=" + numOfpage +

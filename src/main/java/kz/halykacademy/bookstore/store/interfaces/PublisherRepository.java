@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface PublisherRepository extends JpaRepository<PublisherEntity, Long> {
 
-    List<PublisherEntity> findAllByNameContaining(@Param("name")String name);
+    List<PublisherEntity> findAllByNameContainingIgnoreCase(@Param("name")String name);
 
 }

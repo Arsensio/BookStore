@@ -29,7 +29,7 @@ public class GenreController {
     }
 
     @GetMapping("/{id}")
-    public GenreDTO getOne(@PathVariable Long id) throws Throwable {
+    public GenreEntity getOne(@PathVariable Long id) throws Throwable {
         return service.findOne(id);
     }
 

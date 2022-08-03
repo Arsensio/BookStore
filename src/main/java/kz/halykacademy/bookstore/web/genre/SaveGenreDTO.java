@@ -13,8 +13,4 @@ import lombok.ToString;
 public class SaveGenreDTO {
     Long id;
     String name;
-
-   public SaveGenreDTO(String name){
-        this.name = name;
-    }
 }

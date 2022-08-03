@@ -9,26 +9,28 @@ import kz.halykacademy.bookstore.web.publishers.SavePublisherDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/books")
-public class BookControllerImpl   {
+public class BookControllerImpl {
 
     @Autowired
-    private BookService service ;
+    private BookService service;
 
 
     @GetMapping
     public List<BookDTO> listAll() {
         List<BookDTO> books = service.findAll();
 
-        return books ;
+        return books;
     }
 
     @GetMapping("/{id}")
@@ -44,9 +46,14 @@ public class BookControllerImpl   {
         return service.findOneByName(name);
     }
 
+    @GetMapping("/authors")
+    public List<BookDTO> getByAuthors(@RequestParam("name") String name) {
+        System.out.println(name);
+        return service.findAllByAuthors(name);
+    }
 
     @PostMapping
-    public BookEntity save(@RequestBody SaveBookDTO saveBook) {
+    public BookDTO save(@RequestBody SaveBookDTO saveBook) {
         return service.save(saveBook);
     }
 
@@ -55,13 +62,13 @@ public class BookControllerImpl   {
         service.delete(id);
     }
 
-    @PutMapping("/{id}")
-    public BookDTO update(@RequestBody Long id, @RequestBody SaveBookDTO saveBookDTO ){
-       return service.update(id,saveBookDTO);
+    @PutMapping("/update")
+    public BookDTO update(@RequestBody SaveBookDTO saveBookDTO) {
+        return service.update(saveBookDTO);
     }
 
-//    @GetMapping("/search")
-//    public List<BookDTO> findByParameters(@RequestParam("author_id") Long authorId ){
-//        return service.findByAuthor(authorId);
-//    }
+    @GetMapping("/genre")
+    public LinkedHashSet<BookDTO> getByGenre(@RequestBody List<Long> genresId) {
+        return service.findAllByGenre(genresId);
+    }
 }

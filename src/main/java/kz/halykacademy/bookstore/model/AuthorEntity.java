@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.books.BookDTO;
 import lombok.*;
@@ -36,17 +37,19 @@ public class AuthorEntity {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @ManyToMany(mappedBy = "author", fetch = FetchType.LAZY)
-    private List<BookEntity> books = new ArrayList<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "authors")
+    private List<BookEntity> books;
+
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     public AuthorDTO toDto() {
 
-        List<BookDTO> books = List.of();
+        List<String> books = List.of();
         if (this.books != null)
-            books = this.books.stream().map(BookEntity::toDto).toList();
+            books = this.books.stream().map(BookEntity::getName).toList();
 
         return new AuthorDTO(
                 this.id,

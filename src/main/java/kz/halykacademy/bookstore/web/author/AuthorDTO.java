@@ -21,5 +21,5 @@ public class AuthorDTO {
     private String lastName;
     private String patronymic;
     private LocalDate dateOfBirth;
-    private List<BookDTO> books;
+    private List<String> books;
 }

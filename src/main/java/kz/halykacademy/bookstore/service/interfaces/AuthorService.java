@@ -4,14 +4,17 @@ import kz.halykacademy.bookstore.model.*;
 import kz.halykacademy.bookstore.store.interfaces.*;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
+import kz.halykacademy.bookstore.web.books.BookDTO;
 import kz.halykacademy.bookstore.web.books.SaveBookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Service
 public interface AuthorService {
@@ -25,6 +28,8 @@ public interface AuthorService {
     public AuthorDTO save(SaveAuthorDTO saveAuthor);
 
     public void delete(Long id);
+
+    public AuthorDTO update(SaveAuthorDTO saveAuthor);
 }
 
 @Service
@@ -35,19 +40,6 @@ class AuthorServiceImpl implements AuthorService {
 
     @Autowired
     BookRepository bookRepository;
-
-    @Autowired
-    AuthorBookRepository authorBookRepasitory;
-
-    @Autowired
-    BookGenreRepository bookGenreRepository;
-
-    @Autowired
-    GenreRepository genreRepository;
-
-
-    @Autowired
-    BookService bookService;
 
 
     @Override
@@ -70,7 +62,7 @@ class AuthorServiceImpl implements AuthorService {
     public List<AuthorDTO> findAllByFirstName(String name) {
 //        List<AuthorEntity> authorEntities = repository.findAllByFirstNameContaining(name);
 //        System.out.println(authorEntities.toString());
-        return repository.findAllByFirstNameContaining(name).stream().map(AuthorEntity::toDto).toList();
+        return repository.findAllByFirstNameContainingIgnoreCase(name).stream().map(AuthorEntity::toDto).toList();
     }
 
     @Override
@@ -83,38 +75,55 @@ class AuthorServiceImpl implements AuthorService {
                         saveAuthor.getLastName(),
                         saveAuthor.getPatronymic(),
                         saveAuthor.getDateOfBirth(),
-                        saveAuthor.getBooks(),
+                        null,
                         LocalDateTime.now()
                 )
         );
-
-        if (saveAuthor.getBooks() != null) {
-
-
-            saveAuthor.getBooks().forEach(it -> {
-                BookEntity book;
-                if (it.getId() == null || !bookRepository.existsById(it.getId())) {
-                    book = bookService.save(new SaveBookDTO(it.getId(), it.getPrice(),it.getPublisher(),it.getName(), it.getNumOfpage(), it.getYearOfIssue(),it.getAuthor(),it.getGenres()));
-                } else {
-                    book = bookRepository.findById(it.getId()).get();
-                }
-                AuthorBookEntity join = new AuthorBookEntity();
-                join.setAuhtorId(saved.getId());
-                join.setBookId(book.getId());
-
-                authorBookRepasitory.save(join);
-            });
-        }
-
-
         return saved.toDto();
     }
 
+//
+//    public List<BookEntity> getBooks(SaveAuthorDTO saveAuthor){
+//        List<BookEntity>listOfBook = new ArrayList<>();
+//        saveAuthor.getBooks().forEach(it -> {
+//            BookEntity book;
+//            if (it.getId() == null || !bookRepository.existsById(it.getId())) {
+//                book = bookService.save(new SaveBookDTO(it.getId(), it.getPrice(),it.getPublisher(),it.getName(), it.getNumOfpage(), it.getYearOfIssue(),it.getAuthors(),it.getGenres()));
+//            } else {
+//                book = bookRepository.findById(it.getId()).get();
+//            }
+//            listOfBook.add(book);
+//        });
+//        return listOfBook;
+//    }
+
     @Override
     public void delete(Long id) {
-        authorBookRepasitory.deleteAllByAuhtorId(id);
         repository.deleteById(id);
     }
+
+    @Override
+    public AuthorDTO update(SaveAuthorDTO saveAuthor) {
+        repository.findById(saveAuthor.getId()).ifPresent(authorEntity -> {
+            authorEntity.setFirstName(saveAuthor.getFirstName());
+            authorEntity.setLastName(saveAuthor.getLastName());
+            authorEntity.setPatronymic(saveAuthor.getPatronymic());
+            authorEntity.setDateOfBirth(saveAuthor.getDateOfBirth());
+            authorEntity.setCreatedAt(authorEntity.getCreatedAt());
+            authorEntity.setBooks(getBooks(saveAuthor.getBooksIds()));
+            repository.saveAndFlush(authorEntity);
+        });
+        return repository.findById(saveAuthor.getId()).get().toDto();
+    }
+
+    private List<BookEntity> getBooks(List<Long>ids) {
+        System.out.println(ids);
+//        System.out.println(bookRepository.findById(saveAuthor.getBooksIds().get(0)).get());
+        return ids.stream().map(id -> bookRepository.findById(id).get()).collect(Collectors.toList());
+    }
+
+
+
 
 
 }

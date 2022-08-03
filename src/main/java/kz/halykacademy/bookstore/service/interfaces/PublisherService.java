@@ -36,8 +36,6 @@ class PublisherServiceImpl implements PublisherService {
     @Autowired
     PublisherRepository repository;
 
-    @Autowired
-    BookRepository bookRepository;
 
     @Override
     public List<PublisherDTO> findAll() {
@@ -56,7 +54,7 @@ class PublisherServiceImpl implements PublisherService {
 
     @Override
     public List<PublisherDTO> getByName(String name) {
-        return repository.findAllByNameContaining(name)
+        return repository.findAllByNameContainingIgnoreCase(name)
                 .stream()
                 .map(PublisherEntity::toDTO)
                 .toList();
@@ -71,20 +69,6 @@ class PublisherServiceImpl implements PublisherService {
                         savePublisherDTO.getName()
                 )
         );
-
-        if (savePublisherDTO.getBooks()!=null){
-            savePublisherDTO.getBooks().stream().forEach(it->{
-                bookRepository.findById(it.getId()).ifPresent(a->{
-                    a.setName(a.getName());
-                    a.setPublisher(saved);
-                    a.setAuthor(a.getAuthor());
-                    a.setPrice(a.getPrice());
-                    a.setYearOfIssue(a.getYearOfIssue());
-                    bookRepository.saveAndFlush(a);
-                });
-            });
-        }
-
         return saved.toDTO();
     }
 

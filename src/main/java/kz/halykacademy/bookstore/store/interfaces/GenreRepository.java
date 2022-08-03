@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface GenreRepository extends JpaRepository<GenreEntity,Long> {
 
-    List<GenreEntity> findAllByNameContaining(@Param("name") String name);
+    List<GenreEntity> findAllByNameContainingIgnoreCase(String name);
 
 }

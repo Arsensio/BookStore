@@ -26,12 +26,12 @@ import java.util.List;
 public class SaveBookDTO {
     private Long id;
     private double price;
-    private PublisherEntity publisher;
+    private Long publisherId;
     private String name;
     private int numOfPage;
     @Min(1700)
     private Integer yearOfIssue;
-    private List<AuthorEntity>authors;
-    private List<GenreEntity>genres;
+    private List<Long>authors;
+    private List<Long>genres;
 
 }

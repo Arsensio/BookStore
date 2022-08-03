@@ -10,5 +10,5 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<AuthorEntity,Long> {
 
 //    @Query("From AuthorEntity c where c.firstName LIKE  %:name% OR c.lastName LIKE %:name% ")
-    List<AuthorEntity> findAllByFirstNameContaining(String firstName);
+    List<AuthorEntity> findAllByFirstNameContainingIgnoreCase(String firstName);
 }

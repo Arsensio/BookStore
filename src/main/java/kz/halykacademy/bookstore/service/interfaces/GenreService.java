@@ -1,11 +1,7 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
 import kz.halykacademy.bookstore.model.GenreEntity;
-import kz.halykacademy.bookstore.model.PublisherEntity;
-import kz.halykacademy.bookstore.store.interfaces.BookGenreRepository;
 import kz.halykacademy.bookstore.store.interfaces.GenreRepository;
-import kz.halykacademy.bookstore.web.author.AuthorDTO;
-import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
 import kz.halykacademy.bookstore.web.genre.GenreDTO;
 import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,7 @@ public interface GenreService {
 
     public List<GenreDTO> findAll();
 
-    public GenreDTO findOne(Long id) throws Throwable;
+    public GenreEntity findOne(Long id) throws Throwable;
 
     public List<GenreDTO> findAllByName(String name);
 
@@ -29,13 +25,8 @@ public interface GenreService {
 }
 @Service
 class GenreServiceImpl implements GenreService {
-
     @Autowired
     private GenreRepository genreRepository;
-
-    @Autowired
-    private BookGenreRepository bookGenreRepository;
-
 
     @Override
     public List<GenreDTO> findAll() {
@@ -46,15 +37,13 @@ class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO findOne(Long id) throws Throwable {
-        return genreRepository.findById(id)
-                .get()
-                .toDTO();
+    public GenreEntity findOne(Long id) throws Throwable {
+        return genreRepository.findById(id).get();
     }
 
     @Override
     public List<GenreDTO> findAllByName(String name) {
-        return genreRepository.findAllByNameContaining(name)
+        return genreRepository.findAllByNameContainingIgnoreCase(name)
                 .stream().
                 map(GenreEntity::toDTO).
                 toList();
@@ -65,8 +54,7 @@ class GenreServiceImpl implements GenreService {
         GenreEntity saved = genreRepository.save(
                 new GenreEntity(
                         saveGenre.getId(),
-                        saveGenre.getName(),
-                        null
+                        saveGenre.getName()
                 )
         );
         return saved;
@@ -74,7 +62,6 @@ class GenreServiceImpl implements GenreService {
 
     @Override
     public void delete(Long id) {
-        bookGenreRepository.deleteAllByGenreId(id);
         genreRepository.deleteById(id);
     }
 

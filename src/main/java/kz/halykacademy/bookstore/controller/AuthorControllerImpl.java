@@ -44,4 +44,9 @@ public class AuthorControllerImpl {
     public void delete(@PathVariable Long id){
         authorService.delete(id);
     }
+
+    @PutMapping
+    public void update(@RequestBody SaveAuthorDTO saveAuthorDTO){
+        authorService.update(saveAuthorDTO);
+    }
 }
