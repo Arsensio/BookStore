@@ -4,6 +4,7 @@ import kz.halykacademy.bookstore.model.*;
 import kz.halykacademy.bookstore.store.interfaces.*;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -109,7 +110,6 @@ class AuthorServiceImpl implements AuthorService {
             authorEntity.setPatronymic(saveAuthor.getPatronymic());
             authorEntity.setDateOfBirth(saveAuthor.getDateOfBirth());
             authorEntity.setCreatedAt(authorEntity.getCreatedAt());
-            authorEntity.setBooks(getBooks(saveAuthor.getBooksIds()));
             repository.saveAndFlush(authorEntity);
         });
         return repository.findById(saveAuthor.getId()).get().toDto();
@@ -117,10 +117,11 @@ class AuthorServiceImpl implements AuthorService {
 
 
 
-    private List<BookEntity> getBooks(List<Long>ids) {
+    private LinkedHashSet<BookEntity> getBooks(List<Long>ids) {
+        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>();
         System.out.println(ids);
-//        System.out.println(bookRepository.findById(saveAuthor.getBooksIds().get(0)).get());
-        return ids.stream().map(id -> bookRepository.findById(id).get()).collect(Collectors.toList());
+        booksFound.addAll(bookRepository.findAllByIdIn(ids));
+        return booksFound;
     }
 
     @Override

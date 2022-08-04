@@ -14,4 +14,6 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity,Long> {
 
     List<AuthorEntity>findAllByBooks_Genres_IdIn(List<Long>ids);
 
+    List<AuthorEntity>findAllByIdIn(List<Long>ids);
+
 }

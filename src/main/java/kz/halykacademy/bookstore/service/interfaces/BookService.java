@@ -86,15 +86,19 @@ class BookServiceImpl implements BookService {
                         saveBook.getName(),
                         saveBook.getNumOfPage(),
                         saveBook.getYearOfIssue(),
-                        getAuthors(saveBook),
-                        getGeners(saveBook)
+                        getAuthors(saveBook.getAuthors()),
+                        getGeners(saveBook),
+                        null
                 )
         );
         return saved.toDto();
     }
 
-    public List<AuthorEntity> getAuthors(SaveBookDTO saveBookDTO) {
-        return saveBookDTO.getAuthors().stream().map(id -> authorRepository.findById(id).get()).collect(Collectors.toList());
+    public List<AuthorEntity> getAuthors(List<Long> ids) {
+        LinkedHashSet<AuthorEntity> authorEntities = new LinkedHashSet<>();
+        authorEntities.addAll(authorRepository.findAllByIdIn(ids).stream().toList());
+
+        return new ArrayList<>(authorEntities);
     }
 
     public List<GenreEntity> getGeners(SaveBookDTO saveBookDTO) {
@@ -117,7 +121,7 @@ class BookServiceImpl implements BookService {
         repository.findById(saveBookDTO.getId()).ifPresent(it -> {
             it.setName(saveBookDTO.getName());
             it.setPublisher(publisherRepository.findById(saveBookDTO.getPublisherId()).get());
-            it.setAuthors(getAuthors(saveBookDTO));
+            it.setAuthors(getAuthors(saveBookDTO.getAuthors()));
             it.setPrice(saveBookDTO.getPrice());
             it.setYearOfIssue(saveBookDTO.getYearOfIssue());
             it.setGenres(getGeners(saveBookDTO));
@@ -128,10 +132,9 @@ class BookServiceImpl implements BookService {
     }
 
     @Override
-    public LinkedHashSet<BookDTO> findAllByGenre(List<Long>ids) {
+    public LinkedHashSet<BookDTO> findAllByGenre(List<Long> ids) {
         LinkedHashSet<BookDTO> booksFound = new LinkedHashSet<>();
         booksFound.addAll(repository.findAllByGenres_IdIn(ids).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-//        booksFound.addAll(repository.findBookEntitiesByGenres(genre).stream().map(BookEntity::toDto).collect(Collectors.toList())) ;
         return booksFound;
     }
 
@@ -139,14 +142,14 @@ class BookServiceImpl implements BookService {
     public List<BookDTO> findAllByAuthors(String name) {
         System.out.println(name);
 
-        String[]fio = name.split(" ");
+        String[] fio = name.split(" ");
 
-        List<BookDTO> booksFound =new ArrayList<>();
+        List<BookDTO> booksFound = new ArrayList<>();
 
-        if (fio.length == 1){
+        if (fio.length == 1) {
             booksFound.addAll(repository.findBookEntitiesByAuthors(fio[0]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-        }else if(fio.length == 2) {
-            booksFound.addAll(repository.findBookEntitiesByAuthorsFullName(fio[0],fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
+        } else if (fio.length == 2) {
+            booksFound.addAll(repository.findBookEntitiesByAuthorsFullName(fio[0], fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
         }
 
         System.out.println(booksFound);

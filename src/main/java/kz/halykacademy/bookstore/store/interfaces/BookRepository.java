@@ -25,4 +25,6 @@ public interface BookRepository extends JpaRepository<BookEntity,Long> {
 
     List<BookEntity>findAllByGenres_IdIn(List<Long>genresIds);
 
+    List<BookEntity>findAllByIdIn(List<Long>ids);
+
 }

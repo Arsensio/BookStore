@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -44,32 +46,48 @@ public class BookEntity {
 
 
     @ManyToMany()
-    @JoinTable(name="author_book_table",
-            joinColumns={@JoinColumn(name="book_id")},
-            inverseJoinColumns={@JoinColumn(name="author_id")})
+    @JoinTable(name = "author_book_table",
+            joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "author_id")})
     List<AuthorEntity> authors;
 
 
-        @ManyToMany()
-        @JoinTable(name="book_genre_table",
-                joinColumns={@JoinColumn(name="book_id")},
-                inverseJoinColumns={@JoinColumn(name="genre_id")})
-    List<GenreEntity>genres;
+    @ManyToMany()
+    @JoinTable(name = "book_genre_table",
+            joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "genre_id")})
+    List<GenreEntity> genres;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "books")
+    List<OrderEntity>orderEntities;
 
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BookEntity book = (BookEntity) o;
+        return id.equals(book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
     public BookDTO toDto() {
-        List<String>authorDTOList = List.of();
-        if (this.authors != null){
+        List<String> authorDTOList = List.of();
+        if (this.authors != null) {
             authorDTOList = this.authors.stream().map(AuthorEntity::getFullName).toList();
         }
         String publisherName = "";
-        if (this.publisher!= null){
+        if (this.publisher != null) {
             publisherName = this.publisher.getName();
         }
-        List<String>genres = List.of();
-        if (this.genres!=null){
+        List<String> genres = List.of();
+        if (this.genres != null) {
             genres = this.genres.stream().map(GenreEntity::getName).toList();
         }
 
@@ -85,7 +103,6 @@ public class BookEntity {
         );
 
     }
-
 
 
     @Override

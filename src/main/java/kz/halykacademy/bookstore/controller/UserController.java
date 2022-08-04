@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO findOne(Long id) throws Throwable{
+    public UserDTO findOne(@RequestParam Long id) throws Throwable{
         return userService.findOne(id);
     }
 
