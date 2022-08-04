@@ -1,8 +1,6 @@
 package kz.halykacademy.bookstore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import kz.halykacademy.bookstore.web.author.AuthorDTO;
-import kz.halykacademy.bookstore.web.books.BookDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Null;
-import java.time.LocalDate;
 import java.util.List;
 
 @Getter

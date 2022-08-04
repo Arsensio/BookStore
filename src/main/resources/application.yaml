@@ -16,6 +16,15 @@ spring:
           lob:
             non_contextual_creation: true
 
+
+#  flyway:
+#    baselineOnMigrate: true
+#    url: jdbc:postgresql://localhost:5432
+#    schemas: bookstore_db
+#    user: postgres
+#    password: 123
+
+
 logging:
   level:
     org.hibernate.SQL: DEBUG

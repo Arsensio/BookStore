@@ -1,16 +1,11 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.model.BookEntity;
 import kz.halykacademy.bookstore.service.interfaces.BookService;
-import kz.halykacademy.bookstore.web.books.BookDTO;
-import kz.halykacademy.bookstore.web.books.SaveBookDTO;
-import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
-import kz.halykacademy.bookstore.web.publishers.SavePublisherDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
+import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.repository.query.Param;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,7 +15,7 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/books")
-public class BookControllerImpl {
+public class BookController {
 
     @Autowired
     private BookService service;

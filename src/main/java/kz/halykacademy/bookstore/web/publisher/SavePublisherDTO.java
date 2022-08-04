@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.web.publishers;
+package kz.halykacademy.bookstore.web.publisher;
 
 import kz.halykacademy.bookstore.model.BookEntity;
 import lombok.AllArgsConstructor;

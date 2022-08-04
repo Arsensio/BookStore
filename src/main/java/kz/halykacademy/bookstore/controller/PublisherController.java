@@ -1,17 +1,12 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.model.PublisherEntity;
-import kz.halykacademy.bookstore.model.PublisherEntity;
 import kz.halykacademy.bookstore.service.interfaces.PublisherService;
-import kz.halykacademy.bookstore.web.books.BookDTO;
-import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
-import kz.halykacademy.bookstore.web.publishers.SavePublisherDTO;
+import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
+import kz.halykacademy.bookstore.web.publisher.SavePublisherDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/publishers")
@@ -47,6 +42,11 @@ public class PublisherController {
 
     @PutMapping("/{id}")
     public PublisherDTO update(@PathVariable Long id,@RequestBody SavePublisherDTO savePublisherDTO){
-        return service.update(id,savePublisherDTO);
+        return service.update(savePublisherDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
+        service.delete(id);
     }
 }

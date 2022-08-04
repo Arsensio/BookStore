@@ -2,20 +2,13 @@ package kz.halykacademy.bookstore.service.interfaces;
 
 import kz.halykacademy.bookstore.model.*;
 import kz.halykacademy.bookstore.store.interfaces.*;
-import kz.halykacademy.bookstore.web.author.AuthorDTO;
-import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
-import kz.halykacademy.bookstore.web.books.BookDTO;
-import kz.halykacademy.bookstore.web.books.SaveBookDTO;
-import kz.halykacademy.bookstore.web.genre.GenreDTO;
-import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
+import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -137,9 +130,7 @@ class BookServiceImpl implements BookService {
     @Override
     public LinkedHashSet<BookDTO> findAllByGenre(List<Long>ids) {
         LinkedHashSet<BookDTO> booksFound = new LinkedHashSet<>();
-
         booksFound.addAll(repository.findAllByGenres_IdIn(ids).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-
 //        booksFound.addAll(repository.findBookEntitiesByGenres(genre).stream().map(BookEntity::toDto).collect(Collectors.toList())) ;
         return booksFound;
     }
@@ -148,8 +139,16 @@ class BookServiceImpl implements BookService {
     public List<BookDTO> findAllByAuthors(String name) {
         System.out.println(name);
 
+        String[]fio = name.split(" ");
+
         List<BookDTO> booksFound =new ArrayList<>();
-        booksFound.addAll(repository.findBookEntitiesByAuthors(name).stream().map(BookEntity::toDto).collect(Collectors.toList()));
+
+        if (fio.length == 1){
+            booksFound.addAll(repository.findBookEntitiesByAuthors(fio[0]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
+        }else if(fio.length == 2) {
+            booksFound.addAll(repository.findBookEntitiesByAuthorsFullName(fio[0],fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
+        }
+
         System.out.println(booksFound);
         return booksFound;
     }

@@ -4,14 +4,11 @@ import kz.halykacademy.bookstore.model.*;
 import kz.halykacademy.bookstore.store.interfaces.*;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
-import kz.halykacademy.bookstore.web.books.BookDTO;
-import kz.halykacademy.bookstore.web.books.SaveBookDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -30,6 +27,8 @@ public interface AuthorService {
     public void delete(Long id);
 
     public AuthorDTO update(SaveAuthorDTO saveAuthor);
+
+    LinkedHashSet<AuthorDTO> findAllByGenre(List<Long> ids);
 }
 
 @Service
@@ -116,10 +115,19 @@ class AuthorServiceImpl implements AuthorService {
         return repository.findById(saveAuthor.getId()).get().toDto();
     }
 
+
+
     private List<BookEntity> getBooks(List<Long>ids) {
         System.out.println(ids);
 //        System.out.println(bookRepository.findById(saveAuthor.getBooksIds().get(0)).get());
         return ids.stream().map(id -> bookRepository.findById(id).get()).collect(Collectors.toList());
+    }
+
+    @Override
+    public LinkedHashSet<AuthorDTO> findAllByGenre(List<Long> ids) {
+        LinkedHashSet<AuthorDTO> authorFound = new LinkedHashSet<>();
+        authorFound.addAll(repository.findAllByBooks_Genres_IdIn(ids).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+        return authorFound;
     }
 
 

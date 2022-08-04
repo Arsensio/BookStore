@@ -2,14 +2,12 @@ package kz.halykacademy.bookstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
-import kz.halykacademy.bookstore.web.books.BookDTO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

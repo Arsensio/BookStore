@@ -1,8 +1,7 @@
 package kz.halykacademy.bookstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kz.halykacademy.bookstore.web.books.BookDTO;
-import kz.halykacademy.bookstore.web.publishers.PublisherDTO;
+import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 

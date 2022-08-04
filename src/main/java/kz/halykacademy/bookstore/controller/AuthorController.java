@@ -1,20 +1,19 @@
 package kz.halykacademy.bookstore.controller;
 
-import kz.halykacademy.bookstore.model.AuthorEntity;
 import kz.halykacademy.bookstore.service.interfaces.AuthorService;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/authors")
-public class AuthorControllerImpl {
+public class AuthorController {
 
     @Autowired
     AuthorService authorService;
@@ -48,5 +47,10 @@ public class AuthorControllerImpl {
     @PutMapping
     public void update(@RequestBody SaveAuthorDTO saveAuthorDTO){
         authorService.update(saveAuthorDTO);
+    }
+
+    @GetMapping("/genre")
+    public LinkedHashSet<AuthorDTO> getByGenre(@RequestBody List<Long> ids) {
+        return authorService.findAllByGenre(ids);
     }
 }

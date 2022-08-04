@@ -21,7 +21,7 @@ public interface GenreService {
 
     public void delete(Long id);
 
-    public GenreDTO update(Long id, SaveGenreDTO saveGenreDTO);
+    public GenreDTO update( SaveGenreDTO saveGenreDTO);
 }
 @Service
 class GenreServiceImpl implements GenreService {
@@ -66,16 +66,16 @@ class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO update(Long id, SaveGenreDTO saveGenreDTO) {
+    public GenreDTO update( SaveGenreDTO saveGenreDTO) {
 
-        genreRepository.findById(id).ifPresentOrElse(it -> {
+        genreRepository.findById(saveGenreDTO.getId()).ifPresentOrElse(it -> {
             it.setName(saveGenreDTO.getName());
             genreRepository.saveAndFlush(it);
         },()->{
             System.out.println("no such publisher");
         });
 
-        return genreRepository.findById(id).get().toDTO();
+        return genreRepository.findById(saveGenreDTO.getId()).get().toDTO();
     }
 
 

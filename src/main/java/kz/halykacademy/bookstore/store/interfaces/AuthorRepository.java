@@ -11,4 +11,7 @@ public interface AuthorRepository extends JpaRepository<AuthorEntity,Long> {
 
 //    @Query("From AuthorEntity c where c.firstName LIKE  %:name% OR c.lastName LIKE %:name% ")
     List<AuthorEntity> findAllByFirstNameContainingIgnoreCase(String firstName);
+
+    List<AuthorEntity>findAllByBooks_Genres_IdIn(List<Long>ids);
+
 }
