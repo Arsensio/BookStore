@@ -84,7 +84,7 @@ class BookServiceImpl implements BookService {
                         saveBook.getPrice(),
                         publisherRepository.findById(saveBook.getPublisherId()).get(),
                         saveBook.getName(),
-                        saveBook.getNumOfPage(),
+                        saveBook.getNumOfpage(),
                         saveBook.getYearOfIssue(),
                         getAuthors(saveBook.getAuthors()),
                         getGeners(saveBook),

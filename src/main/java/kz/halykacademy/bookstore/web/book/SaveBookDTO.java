@@ -17,7 +17,7 @@ public class SaveBookDTO {
     private double price;
     private Long publisherId;
     private String name;
-    private int numOfPage;
+    private int numOfpage;
     @Min(1700)
     private Integer yearOfIssue;
     private List<Long>authors;

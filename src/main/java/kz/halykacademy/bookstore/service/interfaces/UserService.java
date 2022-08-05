@@ -6,9 +6,12 @@ import kz.halykacademy.bookstore.web.user.SaveUserDTO;
 import kz.halykacademy.bookstore.web.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public interface UserService {
@@ -33,6 +36,20 @@ class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    PasswordEncoder encoder;
+
+    @PostConstruct
+    public void init(){
+        Optional<UserEntity> user = userRepository.findByUsernameContainingIgnoreCase("admin");
+
+        if (user.isEmpty()){
+            userRepository.saveAndFlush(
+                    new UserEntity("admin", encoder.encode("user"), "ADMIN", false)
+            );
+        }
+    }
+
     @Override
     public List<UserDTO> findAll() {
         return userRepository.findAll().stream().map(UserEntity::toDTO).collect(Collectors.toList());
@@ -53,14 +70,9 @@ class UserServiceImpl implements UserService {
         System.out.println(saveUserDTO.getUserName());
         System.out.println(saveUserDTO.getPassword());
         System.out.println(saveUserDTO.getRole());
+        System.out.println( saveUserDTO.isBlocked());
         UserEntity saved = userRepository.save(
-                new UserEntity(
-                        saveUserDTO.getId(),
-                        saveUserDTO.getUserName(),
-                        saveUserDTO.getPassword(),
-                        saveUserDTO.getRole(),
-                        saveUserDTO.isBlocked()
-                )
+                new UserEntity(saveUserDTO.getUserName(), encoder.encode(saveUserDTO.getPassword()), saveUserDTO.getRole(), saveUserDTO.isBlocked())
         );
 
         return saved.toDTO();
@@ -68,6 +80,8 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(SaveUserDTO user) {
+        System.out.println(user.isBlocked());
+
         userRepository.findById(user.getId()).ifPresent(userEntity -> {
             userEntity.setUsername(user.getUserName());
             userEntity.setUserRole(user.getRole());

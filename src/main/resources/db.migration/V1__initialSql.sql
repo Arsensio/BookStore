@@ -1,0 +1,1 @@
+INSERT Into genres value (id,genre_name)VALUEs(5,"FLYWAY WORKING")

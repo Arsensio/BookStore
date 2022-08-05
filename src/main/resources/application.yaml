@@ -5,6 +5,13 @@ spring:
     username: postgres
     password: 123
 
+  flyway:
+    url:  jdbc:postgresql://localhost:5432/bookstore_db
+    user: postgres
+    password: 123
+
+
+
 
   jpa:
     hibernate:
@@ -15,7 +22,6 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
-
 
 #  flyway:
 #    baselineOnMigrate: true

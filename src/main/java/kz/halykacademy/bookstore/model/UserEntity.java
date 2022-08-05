@@ -33,6 +33,12 @@ public class UserEntity {
     @Column(name = "is_blocked",nullable = false)
     private boolean isBlocked;
 
+    public UserEntity(String username, String password, String userRole, boolean isBlocked) {
+        this.username = username;
+        this.password = password;
+        this.userRole = userRole;
+        this.isBlocked = isBlocked;
+    }
 
     public UserDTO toDTO() {
         return new UserDTO(
