@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.model.PublisherEntity;
+import kz.halykacademy.bookstore.models.PublisherEntity;
 import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
 import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
 import kz.halykacademy.bookstore.web.publisher.SavePublisherDTO;

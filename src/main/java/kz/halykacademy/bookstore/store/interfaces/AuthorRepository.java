@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.store.interfaces;
 
-import kz.halykacademy.bookstore.model.AuthorEntity;
+import kz.halykacademy.bookstore.models.AuthorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

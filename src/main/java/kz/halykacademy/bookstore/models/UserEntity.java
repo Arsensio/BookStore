@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.model;
+package kz.halykacademy.bookstore.models;
 
 
 import kz.halykacademy.bookstore.web.user.UserDTO;

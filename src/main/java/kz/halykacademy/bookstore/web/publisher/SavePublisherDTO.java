@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.web.publisher;
 
-import kz.halykacademy.bookstore.model.BookEntity;
+import kz.halykacademy.bookstore.models.BookEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

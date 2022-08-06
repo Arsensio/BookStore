@@ -1,14 +1,11 @@
-package kz.halykacademy.bookstore.provider;
+package kz.halykacademy.bookstore.providers;
 
 
-import kz.halykacademy.bookstore.model.PublisherEntity;
-import kz.halykacademy.bookstore.provider.interfaces.PublisherProvider;
+import kz.halykacademy.bookstore.models.PublisherEntity;
+import kz.halykacademy.bookstore.providers.interfaces.PublisherProvider;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;

@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.model.GenreEntity;
+import kz.halykacademy.bookstore.models.GenreEntity;
 import kz.halykacademy.bookstore.store.interfaces.GenreRepository;
 import kz.halykacademy.bookstore.web.genre.GenreDTO;
 import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;

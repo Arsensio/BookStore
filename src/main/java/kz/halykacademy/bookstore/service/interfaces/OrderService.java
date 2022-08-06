@@ -1,8 +1,9 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.model.BookEntity;
-import kz.halykacademy.bookstore.model.OrderEntity;
-import kz.halykacademy.bookstore.model.UserEntity;
+import kz.halykacademy.bookstore.exceptions.BlockedUserException;
+import kz.halykacademy.bookstore.exceptions.PriceExceedsLimitException;
+import kz.halykacademy.bookstore.models.BookEntity;
+import kz.halykacademy.bookstore.models.OrderEntity;
 import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import kz.halykacademy.bookstore.store.interfaces.OrderRepository;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public interface OrderService {
@@ -55,15 +55,13 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO save(SaveOrderDTO saveOrderDTO) throws Exception {
-        if (!isBlocked(saveOrderDTO.getUser_id())) {
-            List<BookEntity> books = findAllBook(saveOrderDTO.getBooks());
-            AtomicReference<Double> checkPrice = new AtomicReference<>((double) 0);
-            books.forEach(book -> {
-                checkPrice.updateAndGet(v -> (v + book.getPrice()));
-            });
 
-            System.out.println(checkPrice);
-            if (checkPrice.get() <= 10000.0) {
+        if (!isBlocked(saveOrderDTO.getUser_id())) {
+
+            List<BookEntity> books = findAllBook(saveOrderDTO.getBooks());
+            System.out.println(books.stream().mapToDouble(BookEntity::getPrice).sum());
+
+            if (books.stream().mapToDouble(BookEntity::getPrice).sum() <= 10000.0) {
                 OrderEntity saved = orderRepository.saveAndFlush(
                         new OrderEntity(
                                 saveOrderDTO.getId(),
@@ -75,10 +73,10 @@ class OrderServiceImpl implements OrderService {
                 );
                 return saved.toDTO();
             } else {
-                throw new Exception("The price of books exceeds a certain norm");
+                throw new PriceExceedsLimitException("The price of books exceeds a certain norm");
             }
         } else {
-            throw new Exception("User Is Blocked");
+            throw new BlockedUserException("User Is Blocked");
         }
     }
 
@@ -92,14 +90,15 @@ class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO update(SaveOrderDTO order) {
-
-        orderRepository.findById(order.getId()).ifPresent(it -> {
-            it.setStatus(order.getStatus());
-            it.setUser_id(order.getUser_id());
-
-            orderRepository.saveAndFlush(it);
-        });
-        return orderRepository.findById(order.getId()).get().toDTO();
+        if (!isBlocked(order.getUser_id())) {
+            orderRepository.findById(order.getId()).ifPresent(it -> {
+                it.setStatus(order.getStatus());
+                it.setUser_id(order.getUser_id());
+                it.setBooks(findAllBook(order.getBooks()));
+                orderRepository.saveAndFlush(it);
+            });
+            return orderRepository.findById(order.getId()).get().toDTO();
+        } else throw new BlockedUserException("User Is blocked");
     }
 
     @Override

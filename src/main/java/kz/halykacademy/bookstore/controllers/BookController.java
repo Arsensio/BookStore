@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.controller;
+package kz.halykacademy.bookstore.controllers;
 
 import kz.halykacademy.bookstore.service.interfaces.BookService;
 import kz.halykacademy.bookstore.web.book.BookDTO;

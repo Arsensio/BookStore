@@ -1,10 +1,9 @@
-package kz.halykacademy.bookstore.provider;
+package kz.halykacademy.bookstore.providers;
 
-import kz.halykacademy.bookstore.model.BookEntity;
-import kz.halykacademy.bookstore.provider.interfaces.BookProvider;
+import kz.halykacademy.bookstore.models.BookEntity;
+import kz.halykacademy.bookstore.providers.interfaces.BookProvider;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

@@ -1,6 +1,6 @@
-package kz.halykacademy.bookstore.provider.interfaces;
+package kz.halykacademy.bookstore.providers.interfaces;
 
-import kz.halykacademy.bookstore.model.BookEntity;
+import kz.halykacademy.bookstore.models.BookEntity;
 
 import java.util.List;
 

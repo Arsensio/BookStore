@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.model;
+package kz.halykacademy.bookstore.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -26,6 +26,20 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object>handleNotFound(ResourceNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MyError(ex.getMessage(),LocalDateTime.now()));
     }
+
+
+    @ExceptionHandler(value = BlockedUserException.class)
+    protected ResponseEntity<Object>handleBlockedUserException(BlockedUserException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(exception.getMessage(),LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(value = PriceExceedsLimitException.class)
+    protected ResponseEntity<Object>handlePriceLimitException(PriceExceedsLimitException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(exception.getMessage(),LocalDateTime.now()));
+    }
+
+
+
 }
 
 @Getter

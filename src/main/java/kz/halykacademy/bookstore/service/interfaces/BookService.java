@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.model.*;
+import kz.halykacademy.bookstore.models.*;
 import kz.halykacademy.bookstore.store.interfaces.*;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.book.SaveBookDTO;

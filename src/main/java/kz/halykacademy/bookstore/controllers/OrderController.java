@@ -1,13 +1,13 @@
-package kz.halykacademy.bookstore.controller;
+package kz.halykacademy.bookstore.controllers;
 
 
 import kz.halykacademy.bookstore.service.interfaces.OrderService;
 import kz.halykacademy.bookstore.web.order.OrderDTO;
 import kz.halykacademy.bookstore.web.order.SaveOrderDTO;
-import kz.halykacademy.bookstore.web.user.SaveUserDTO;
-import kz.halykacademy.bookstore.web.user.UserDTO;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.core.annotation.AuthenticationPrincipal;
+//import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class OrderController {
         return orderService.save(saveOrderDTO);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     public OrderDTO update(@RequestBody SaveOrderDTO orderDTO) {
         return orderService.update(orderDTO);
     }

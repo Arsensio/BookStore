@@ -1,9 +1,7 @@
 package kz.halykacademy.bookstore.store.interfaces;
 
-import kz.halykacademy.bookstore.model.BookEntity;
-import kz.halykacademy.bookstore.model.GenreEntity;
+import kz.halykacademy.bookstore.models.GenreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

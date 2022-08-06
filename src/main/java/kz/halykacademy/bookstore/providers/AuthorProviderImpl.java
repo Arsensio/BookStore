@@ -1,7 +1,7 @@
-package kz.halykacademy.bookstore.provider;
+package kz.halykacademy.bookstore.providers;
 
-import kz.halykacademy.bookstore.model.AuthorEntity;
-import kz.halykacademy.bookstore.provider.interfaces.AuthorProvider;
+import kz.halykacademy.bookstore.models.AuthorEntity;
+import kz.halykacademy.bookstore.providers.interfaces.AuthorProvider;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;

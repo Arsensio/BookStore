@@ -1,6 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.model.UserEntity;
+import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
 import kz.halykacademy.bookstore.web.user.SaveUserDTO;
 import kz.halykacademy.bookstore.web.user.UserDTO;
@@ -85,7 +85,7 @@ class UserServiceImpl implements UserService {
         userRepository.findById(user.getId()).ifPresent(userEntity -> {
             userEntity.setUsername(user.getUserName());
             userEntity.setUserRole(user.getRole());
-            userEntity.setPassword(user.getPassword());
+            userEntity.setPassword(encoder.encode(user.getPassword()));
             userEntity.setBlocked(user.isBlocked());
             userRepository.saveAndFlush(userEntity);
         });

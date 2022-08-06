@@ -1,8 +1,6 @@
-package kz.halykacademy.bookstore.provider.interfaces;
+package kz.halykacademy.bookstore.providers.interfaces;
 
-import kz.halykacademy.bookstore.model.PublisherEntity;
-import kz.halykacademy.bookstore.model.PublisherEntity;
-import org.springframework.stereotype.Component;
+import kz.halykacademy.bookstore.models.PublisherEntity;
 
 import java.util.List;
 

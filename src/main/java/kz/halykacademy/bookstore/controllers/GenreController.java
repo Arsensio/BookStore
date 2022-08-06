@@ -1,7 +1,7 @@
-package kz.halykacademy.bookstore.controller;
+package kz.halykacademy.bookstore.controllers;
 
 
-import kz.halykacademy.bookstore.model.GenreEntity;
+import kz.halykacademy.bookstore.models.GenreEntity;
 import kz.halykacademy.bookstore.service.interfaces.GenreService;
 import kz.halykacademy.bookstore.web.genre.GenreDTO;
 import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;

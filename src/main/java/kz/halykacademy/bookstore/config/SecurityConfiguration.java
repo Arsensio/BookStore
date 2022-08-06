@@ -1,11 +1,12 @@
 package kz.halykacademy.bookstore.config;
 
 
-import kz.halykacademy.bookstore.service.interfaces.MyUserDetailsService;
+import kz.halykacademy.bookstore.exceptions.CustomExceptionHandler;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,17 +18,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public UserDetailsService userDetailsService(UserRepository userRepository){
-        return new MyUserDetailsService(userRepository);
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        MyUserDetailsService myUser = new MyUserDetailsService(userRepository);
+        return myUser;
     }
-//
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/users").hasRole("ADMIN")
-//                .antMatchers("books").hasAnyRole("ADMIN", "USER")
-//                .and().formLogin();
-//        return http.build();
-//    }
 
-
+    @Bean
+    public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf().disable().authorizeRequests()
+//                .antMatchers(HttpMethod.GET, "/**").authenticated()
+//                .antMatchers(HttpMethod.POST, "/orders").hasAuthority("USER")
+//                .antMatchers(HttpMethod.PUT, "/orders/**").hasAuthority("USER")
+                .antMatchers("/**").permitAll()
+                .and()
+                .httpBasic(Customizer.withDefaults()).build();
+    }
 }
