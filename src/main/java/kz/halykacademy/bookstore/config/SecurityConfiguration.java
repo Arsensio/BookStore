@@ -26,9 +26,9 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable().authorizeRequests()
-//                .antMatchers(HttpMethod.GET, "/**").authenticated()
-//                .antMatchers(HttpMethod.POST, "/orders").hasAuthority("USER")
-//                .antMatchers(HttpMethod.PUT, "/orders/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.POST, "/orders").hasAuthority("USER")
+                .antMatchers(HttpMethod.PUT, "/orders/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.GET, "/**").authenticated()
                 .antMatchers("/**").permitAll()
                 .and()
                 .httpBasic(Customizer.withDefaults()).build();

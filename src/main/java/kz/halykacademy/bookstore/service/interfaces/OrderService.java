@@ -28,6 +28,8 @@ public interface OrderService {
     public OrderDTO update(@RequestBody SaveOrderDTO user);
 
     public void delete(@PathVariable Long id);
+
+    List<OrderDTO> findAllByUserId(String username);
 }
 
 @Service
@@ -104,5 +106,10 @@ class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Long id) {
         orderRepository.deleteById(id);
+    }
+
+    @Override
+    public List<OrderDTO> findAllByUserId(String username) {
+        return orderRepository.findAllByUser_id(userRepository.findByUsernameIgnoreCase(username).get().getId()).stream().map(OrderEntity::toDTO).collect(Collectors.toList());
     }
 }

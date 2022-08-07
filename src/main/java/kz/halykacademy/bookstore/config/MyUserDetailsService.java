@@ -14,7 +14,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userFound = userRepository.findByUsernameContainingIgnoreCase(username).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
+        UserEntity userFound = userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new ResourceNotFoundException("User Not Found"));
 
         if (userFound != null && !userFound.isBlocked()) {
             UserDetails user = User.builder()

@@ -41,7 +41,7 @@ class UserServiceImpl implements UserService {
 
     @PostConstruct
     public void init(){
-        Optional<UserEntity> user = userRepository.findByUsernameContainingIgnoreCase("admin");
+        Optional<UserEntity> user = userRepository.findByUsernameIgnoreCase("admin");
 
         if (user.isEmpty()){
             userRepository.saveAndFlush(
@@ -62,7 +62,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getByName(String username) {
-        return userRepository.findByUsernameContainingIgnoreCase(username).stream().map(UserEntity::toDTO).collect(Collectors.toList());
+        return userRepository.findByUsernameIgnoreCase(username).stream().map(UserEntity::toDTO).collect(Collectors.toList());
     }
 
     @Override
