@@ -102,16 +102,22 @@ class OrderServiceImpl implements OrderService {
                            foundOrder.getBooks()
                            )
            ).toDTO();
-        }else if (user.getUserRole().equals("USER")){
-            return orderRepository.save(
-                    new OrderEntity(
-                            foundOrder.getId(),
-                            foundOrder.getUser_id(),
-                            foundOrder.getStatus(),
-                            foundOrder.getCreatedAt(),
-                            findAllBook(order.getBooks())
-                    )
-            ).toDTO();
+        }else if (user.getUserRole().equals("USER")) {
+            List<BookEntity> books = findAllBook(order.getBooks());
+            System.out.println(books.stream().mapToDouble(BookEntity::getPrice).sum());
+            if (books.stream().mapToDouble(BookEntity::getPrice).sum() <= 10000.0) {
+                return orderRepository.save(
+                        new OrderEntity(
+                                foundOrder.getId(),
+                                foundOrder.getUser_id(),
+                                foundOrder.getStatus(),
+                                foundOrder.getCreatedAt(),
+                                books
+                        )
+                ).toDTO();
+            }else {
+                throw new PriceExceedsLimitException("The price of books exceeds a certain norm");
+            }
         }
         return null;
     }
