@@ -6,6 +6,7 @@ import kz.halykacademy.bookstore.web.user.SaveUserDTO;
 import kz.halykacademy.bookstore.web.user.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,17 @@ public interface UserService {
 
     public UserDTO findOne(Long id) throws Throwable;
 
-    public List<UserDTO> getByName(String name);
+    public UserEntity getByName(String name);
 
     public UserDTO save(SaveUserDTO saveUserDTO);
 
-    public UserDTO update(SaveUserDTO user);
+    public UserDTO updateUsername(UserDetails userDetails, SaveUserDTO saveUserDTO);
 
     public void delete(Long id);
+
+    public UserDTO updatePassword(UserDetails user, SaveUserDTO saveUserDTO);
+
+    public UserDTO updateRoleandBlocked(UserDetails user, SaveUserDTO saveUserDTO);
 }
 
 @Service
@@ -40,10 +45,10 @@ class UserServiceImpl implements UserService {
     PasswordEncoder encoder;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         Optional<UserEntity> user = userRepository.findByUsernameIgnoreCase("admin");
 
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             userRepository.saveAndFlush(
                     new UserEntity("admin", encoder.encode("user"), "ADMIN", false)
             );
@@ -61,8 +66,8 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getByName(String username) {
-        return userRepository.findByUsernameIgnoreCase(username).stream().map(UserEntity::toDTO).collect(Collectors.toList());
+    public UserEntity getByName(String username) {
+        return userRepository.findByUsernameIgnoreCase(username).get();
     }
 
     @Override
@@ -70,30 +75,66 @@ class UserServiceImpl implements UserService {
         System.out.println(saveUserDTO.getUserName());
         System.out.println(saveUserDTO.getPassword());
         System.out.println(saveUserDTO.getRole());
-        System.out.println( saveUserDTO.isBlocked());
+        System.out.println(saveUserDTO.isBlocked());
         UserEntity saved = userRepository.save(
-                new UserEntity(saveUserDTO.getUserName(), encoder.encode(saveUserDTO.getPassword()), saveUserDTO.getRole(), saveUserDTO.isBlocked())
+                new UserEntity(saveUserDTO.getUserName(), encoder.encode(saveUserDTO.getPassword()) ,"USER", false)
         );
 
         return saved.toDTO();
     }
 
     @Override
-    public UserDTO update(SaveUserDTO user) {
-        System.out.println(user.isBlocked());
+    public UserDTO updateUsername(UserDetails userDetails, SaveUserDTO saveUserDTO) {
+        UserEntity user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).get();
 
-        userRepository.findById(user.getId()).ifPresent(userEntity -> {
-            userEntity.setUsername(user.getUserName());
-            userEntity.setUserRole(user.getRole());
-            userEntity.setPassword(encoder.encode(user.getPassword()));
-            userEntity.setBlocked(user.isBlocked());
-            userRepository.saveAndFlush(userEntity);
-        });
+        userRepository.save(
+                new UserEntity(
+                        user.getId(),
+                        saveUserDTO.getUserName(),
+                        user.getPassword(),
+                        user.getUserRole(),
+                        user.isBlocked()
+                )
+        );
+
         return userRepository.findById(user.getId()).get().toDTO();
     }
 
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDTO updatePassword(UserDetails userDetails, SaveUserDTO saveUserDTO) {
+        UserEntity user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).get();
+
+        userRepository.save(
+                new UserEntity(
+                        user.getId(),
+                        user.getUsername(),
+                        encoder.encode(saveUserDTO.getPassword()),
+                        user.getUserRole(),
+                        user.isBlocked()
+                )
+        );
+
+        return userRepository.findById(user.getId()).get().toDTO();
+    }
+
+    @Override
+    public UserDTO updateRoleandBlocked(UserDetails userDetails, SaveUserDTO saveUserDTO) {
+        UserEntity user = userRepository.findById(saveUserDTO.getId()).get();
+
+        userRepository.save(
+                new UserEntity(
+                        user.getId(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        saveUserDTO.getRole(),
+                        saveUserDTO.isBlocked()
+                )
+        );
+        return userRepository.findById(user.getId()).get().toDTO();
     }
 }

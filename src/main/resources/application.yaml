@@ -36,3 +36,7 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
+jwt:
+  token:
+    secret: banana
+    expired: 10800000

@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface OrderRepository extends JpaRepository<OrderEntity,Long> {
-    @PreAuthorize("hasAuthority('ADMIN')")
+public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Override
     List<OrderEntity> findAll();
 

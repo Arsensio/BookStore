@@ -2,10 +2,7 @@ package kz.halykacademy.bookstore.models;
 
 
 import kz.halykacademy.bookstore.web.order.OrderDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -51,4 +48,13 @@ public class OrderEntity {
         );
     }
 
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "id=" + id +
+                ", user_id=" + user_id +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }

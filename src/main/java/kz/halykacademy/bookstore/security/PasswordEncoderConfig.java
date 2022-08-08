@@ -1,4 +1,4 @@
-package kz.halykacademy.bookstore.config;
+package kz.halykacademy.bookstore.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

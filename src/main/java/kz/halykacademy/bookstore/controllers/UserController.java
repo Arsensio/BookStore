@@ -5,6 +5,8 @@ import kz.halykacademy.bookstore.service.interfaces.UserService;
 import kz.halykacademy.bookstore.web.user.SaveUserDTO;
 import kz.halykacademy.bookstore.web.user.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +19,23 @@ public class UserController {
     UserService userService;
 
     @GetMapping
-    public List<UserDTO> findAll() {
+    public UserDTO findUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return userService.getByName(userDetails.getUsername()).toDTO();
+    }
+
+    @GetMapping("/admin/users")
+    public List<UserDTO>findAll(){
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public UserDTO findOne(@RequestParam Long id) throws Throwable{
+    public UserDTO findOne(@PathVariable Long id) throws Throwable{
         return userService.findOne(id);
     }
 
     @GetMapping("/name")
-    public List<UserDTO> getByName(@RequestParam("name") String name){
-        return userService.getByName(name);
+    public UserDTO getByName(@RequestParam("name") String name){
+        return userService.getByName(name).toDTO();
     }
 
     @PostMapping
@@ -36,9 +43,19 @@ public class UserController {
         return userService.save(saveUserDTO);
     }
 
-    @PutMapping
-    public UserDTO update(@RequestBody SaveUserDTO user){
-        return userService.update(user);
+    @PutMapping("/update/username")
+    public UserDTO updateUsername(@AuthenticationPrincipal UserDetails user,@RequestBody SaveUserDTO saveUserDTO){
+        return userService.updateUsername(user,saveUserDTO);
+    }
+
+    @PutMapping("/update/password")
+    public UserDTO updatePassword(@AuthenticationPrincipal UserDetails user,@RequestBody SaveUserDTO saveUserDTO){
+        return userService.updatePassword(user,saveUserDTO);
+    }
+
+    @PutMapping("/update/admin/role")
+    public UserDTO updateRole(@AuthenticationPrincipal UserDetails user,@RequestBody SaveUserDTO saveUserDTO){
+        return userService.updateRoleandBlocked(user,saveUserDTO);
     }
 
     @DeleteMapping("/{id}")

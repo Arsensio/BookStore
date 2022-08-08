@@ -4,6 +4,7 @@ import kz.halykacademy.bookstore.exceptions.BlockedUserException;
 import kz.halykacademy.bookstore.exceptions.PriceExceedsLimitException;
 import kz.halykacademy.bookstore.models.BookEntity;
 import kz.halykacademy.bookstore.models.OrderEntity;
+import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import kz.halykacademy.bookstore.store.interfaces.OrderRepository;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
@@ -23,13 +24,13 @@ public interface OrderService {
 
     public OrderDTO findOne(Long id) throws Throwable;
 
-    public OrderDTO save(@RequestBody SaveOrderDTO saveUserDTO) throws Exception;
+    public OrderDTO save(Long id, SaveOrderDTO saveUserDTO) throws Exception;
 
-    public OrderDTO update(@RequestBody SaveOrderDTO user);
+    public OrderDTO update(UserEntity userEntity, Long id, SaveOrderDTO orderDTO);
 
-    public void delete(@PathVariable Long id);
+    public void delete(Long id);
 
-    List<OrderDTO> findAllByUserId(String username);
+    List<OrderEntity> findAllByUserId(Long username);
 }
 
 @Service
@@ -56,19 +57,17 @@ class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderDTO save(SaveOrderDTO saveOrderDTO) throws Exception {
+    public OrderDTO save(Long id, SaveOrderDTO saveOrderDTO) throws Exception {
 
-        if (!isBlocked(saveOrderDTO.getUser_id())) {
-
+        if (!isBlocked(id)) {
             List<BookEntity> books = findAllBook(saveOrderDTO.getBooks());
             System.out.println(books.stream().mapToDouble(BookEntity::getPrice).sum());
-
             if (books.stream().mapToDouble(BookEntity::getPrice).sum() <= 10000.0) {
                 OrderEntity saved = orderRepository.saveAndFlush(
                         new OrderEntity(
-                                saveOrderDTO.getId(),
-                                saveOrderDTO.getUser_id(),
-                                saveOrderDTO.getStatus(),
+                                null,
+                                id,
+                                "Заказ принят",
                                 LocalDateTime.now(),
                                 books
                         )
@@ -91,16 +90,30 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO update(SaveOrderDTO order) {
-        if (!isBlocked(order.getUser_id())) {
-            orderRepository.findById(order.getId()).ifPresent(it -> {
-                it.setStatus(order.getStatus());
-                it.setUser_id(order.getUser_id());
-                it.setBooks(findAllBook(order.getBooks()));
-                orderRepository.saveAndFlush(it);
-            });
-            return orderRepository.findById(order.getId()).get().toDTO();
-        } else throw new BlockedUserException("User Is blocked");
+    public OrderDTO update(UserEntity user, Long id, SaveOrderDTO order) {
+        OrderEntity foundOrder = orderRepository.findById(id).get();
+        if (user.getUserRole().equals("ADMIN")){
+          return orderRepository.save(
+                   new OrderEntity(
+                           foundOrder.getId(),
+                           foundOrder.getUser_id(),
+                           order.getStatus(),
+                           foundOrder.getCreatedAt(),
+                           foundOrder.getBooks()
+                           )
+           ).toDTO();
+        }else if (user.getUserRole().equals("USER")){
+            return orderRepository.save(
+                    new OrderEntity(
+                            foundOrder.getId(),
+                            foundOrder.getUser_id(),
+                            foundOrder.getStatus(),
+                            foundOrder.getCreatedAt(),
+                            findAllBook(order.getBooks())
+                    )
+            ).toDTO();
+        }
+        return null;
     }
 
     @Override
@@ -109,7 +122,7 @@ class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDTO> findAllByUserId(String username) {
-        return orderRepository.findAllByUser_id(userRepository.findByUsernameIgnoreCase(username).get().getId()).stream().map(OrderEntity::toDTO).collect(Collectors.toList());
+    public List<OrderEntity> findAllByUserId(Long id) {
+        return orderRepository.findAllByUser_id(id);
     }
 }
