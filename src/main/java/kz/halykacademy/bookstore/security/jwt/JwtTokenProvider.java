@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.security.jwt;
 
 import io.jsonwebtoken.*;
+import kz.halykacademy.bookstore.exceptions.BlockedUserException;
 import kz.halykacademy.bookstore.exceptions.JwtAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

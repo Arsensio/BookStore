@@ -15,7 +15,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Override
     List<OrderEntity> findAll();
 
-    @Query("FROM OrderEntity WHERE user_id =:user_id")
+    @Query("FROM OrderEntity WHERE userId = ?1")
     List<OrderEntity> findAllByUser_id(Long user_id);
 
 

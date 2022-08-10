@@ -24,10 +24,6 @@ public class OrderController {
     @Autowired
     OrderService orderService;
 
-    @Autowired
-    UserService userService;
-
-
     @GetMapping("/{id}")
     public OrderDTO findOne(@RequestParam Long id) throws Throwable {
         return orderService.findOne(id);
@@ -40,36 +36,29 @@ public class OrderController {
 
     @GetMapping
     public List<OrderDTO> findAllByUserId(@AuthenticationPrincipal UserDetails user) {
-        Long id = userService.getByName(user.getUsername()).getId();
-        return orderService.findAllByUserId(id).stream().map(OrderEntity::toDTO).collect(Collectors.toList());
+        return orderService.findAllByUserId(user).stream().map(OrderEntity::toDTO).collect(Collectors.toList());
     }
 
 
     @PostMapping
     public OrderDTO save(@AuthenticationPrincipal UserDetails userDetails, @RequestBody SaveOrderDTO saveOrderDTO) throws Exception {
-        UserEntity user = userService.getByName(userDetails.getUsername());
-        return orderService.save(user.getId(), saveOrderDTO);
+        return orderService.save(userDetails, saveOrderDTO);
     }
 
     @PutMapping("/update/{id}")
     public OrderDTO update(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, @RequestBody SaveOrderDTO orderDTO) throws Exception {
-        System.out.println("IAM HERE");
-        UserEntity user = userService.getByName(userDetails.getUsername());
-        List<Long> ordersIds = orderService.findAllByUserId(user.getId()).stream().map(OrderEntity::getId).collect(Collectors.toList());
+        List<Long> ordersIds = orderService.findAllByUserId(userDetails).stream().map(OrderEntity::getId).collect(Collectors.toList());
 
         if (!ordersIds.contains(id)) {
             throw new Exception("GET OUT THE WAY");
         }
         System.out.println("AM HERE");
-        return orderService.update(user,id, orderDTO);
+        return orderService.update(userDetails, id, orderDTO);
     }
 
     @PutMapping("update/admin/{id}")
-    public OrderDTO adminUpdate(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long id, @RequestBody SaveOrderDTO orderDTO) throws Exception {
-        System.out.println("IAM HERE");
-        UserEntity user = userService.getByName(userDetails.getUsername());
-        System.out.println("AM HERE");
-        return orderService.update(user,id, orderDTO);
+    public OrderDTO adminUpdate(@PathVariable Long id, @RequestBody SaveOrderDTO orderDTO) throws Exception {
+        return orderService.updateAdmin(id, orderDTO);
     }
 
     @DeleteMapping("/{id}")

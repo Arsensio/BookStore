@@ -38,6 +38,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(exception.getMessage(),LocalDateTime.now()));
     }
 
+    @ExceptionHandler(value = NotEnoughBooksException.class)
+    protected ResponseEntity<Object>handleNotEnoughBookException(NotEnoughBooksException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MyError(exception.getMessage(),LocalDateTime.now()));
+    }
+
 
 
 }

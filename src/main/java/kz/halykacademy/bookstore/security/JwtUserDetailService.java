@@ -5,7 +5,6 @@ import kz.halykacademy.bookstore.security.jwt.JwtUser;
 import kz.halykacademy.bookstore.security.jwt.JwtUserFactory;
 import kz.halykacademy.bookstore.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +19,7 @@ public class JwtUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userService.getByName(username);
+
         if (user == null){
             throw new UsernameNotFoundException("USER with username"+username+"NOT FOUND");
         }

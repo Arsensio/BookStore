@@ -115,13 +115,13 @@ class AuthorServiceImpl implements AuthorService {
     }
 
 
-
-    private LinkedHashSet<BookEntity> getBooks(List<Long>ids) {
-        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>();
-        System.out.println(ids);
-        booksFound.addAll(bookRepository.findAllByIdIn(ids));
-        return booksFound;
-    }
+//
+//    private LinkedHashSet<BookEntity> getBooks(List<Long>ids) {
+//        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>();
+//        System.out.println(ids);
+//        booksFound.addAll(bookRepository.findAllByIdIn(ids));
+//        return booksFound;
+//    }
 
     @Override
     public LinkedHashSet<AuthorDTO> findAllByGenre(List<Long> ids) {

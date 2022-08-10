@@ -14,4 +14,5 @@ public class SaveOrderDTO {
     private Long user_id;
     private String status;
     private List<Long> books;
+    private List<Long>quantity;
 }

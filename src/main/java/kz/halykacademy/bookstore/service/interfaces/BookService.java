@@ -61,6 +61,8 @@ class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO findOne(Long id) throws Throwable {
+//        System.out.println(repository.findById(id).get());
+
         return repository.findById(id)
                 .map(BookEntity::toDto)
                 .orElseThrow((Supplier<Throwable>) () -> new Exception("Author with id not found"));
@@ -82,6 +84,7 @@ class BookServiceImpl implements BookService {
                 new BookEntity(
                         saveBook.getId(),
                         saveBook.getPrice(),
+                        saveBook.getBookQuantity(),
                         publisherRepository.findById(saveBook.getPublisherId()).get(),
                         saveBook.getName(),
                         saveBook.getNumOfpage(),

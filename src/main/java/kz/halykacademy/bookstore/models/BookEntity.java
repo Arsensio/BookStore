@@ -1,16 +1,16 @@
 package kz.halykacademy.bookstore.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import kz.halykacademy.bookstore.web.book.BookDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalIdCache;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
@@ -18,6 +18,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
+@NaturalIdCache
+@Cacheable
 public class BookEntity {
 
     @Id
@@ -28,8 +30,10 @@ public class BookEntity {
     @Column(name = "price")
     double price;
 
+    @Column(name = "book_quantity")
+    Long bookQuantity;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "publisher_id", referencedColumnName = "id")
     PublisherEntity publisher;
 
@@ -45,23 +49,22 @@ public class BookEntity {
     Integer yearOfIssue;
 
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "author_book_table",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "author_id")})
     List<AuthorEntity> authors;
 
 
-    @ManyToMany()
+    @ManyToMany
     @JoinTable(name = "book_genre_table",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")})
     List<GenreEntity> genres;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "books")
-    List<OrderEntity>orderEntities;
 
+    @OneToMany(mappedBy = "book",cascade =CascadeType.MERGE)
+    List<OrderBookEntity> orders = new ArrayList<>();
 
 
     @Override
@@ -104,14 +107,12 @@ public class BookEntity {
 
     }
 
-
     @Override
     public String toString() {
-        return "Book{" +
+        return "BookEntity{" +
                 "id=" + id +
                 ", price=" + price +
-                ", authors=" + authors +
-                ", publisher='" + publisher + '\'' +
+                ", publisher=" + publisher +
                 ", name='" + name + '\'' +
                 ", numOfpage=" + numOfpage +
                 ", yearOfIssue=" + yearOfIssue +

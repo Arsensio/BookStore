@@ -5,10 +5,10 @@ spring:
     username: postgres
     password: 123
 
-  flyway:
-    url:  jdbc:postgresql://localhost:5432/bookstore_db
-    user: postgres
-    password: 123
+#  flyway:
+#    url:  jdbc:postgresql://localhost:5432/bookstore_db
+#    user: postgres
+#    password: 123
 
 
 
@@ -16,15 +16,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
+    pr mnoperties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         jdbc:
           lob:
             non_contextual_creation: true
 
-#  flyway:
-#    baselineOnMigrate: true
+  flyway:
+    validate-on-migrate: true
+
 #    url: jdbc:postgresql://localhost:5432
 #    schemas: bookstore_db
 #    user: postgres
@@ -35,6 +36,7 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
 
 jwt:
   token:
