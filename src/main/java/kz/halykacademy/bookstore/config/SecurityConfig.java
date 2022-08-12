@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -39,6 +42,7 @@ public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain customFilterChain(HttpSecurity http) throws Exception {
+        http.cors();
         return http.
                 httpBasic().disable()
                 .csrf().disable()
@@ -46,6 +50,7 @@ public class SecurityConfig  {
                 .and()
                 .authorizeRequests()
                 .antMatchers(LOGIN_ENDPOINT).permitAll()
+//                .antMatchers("/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/**", "/authors/**", "/publishers/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/admin/**", "/orders/admin/orders").hasAuthority("ADMIN")
@@ -57,6 +62,7 @@ public class SecurityConfig  {
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider)).and().build();
     }
+
 
 //
 //    @Override

@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -40,9 +41,9 @@ public class PublisherEntity  {
     }
 
     public PublisherDTO toDTO(){
-        List<String>booksDTOList = List.of();
+        List<BookDTO>booksDTOList = List.of();
         if (this.books != null){
-            booksDTOList = this.books.stream().map(BookEntity::getName).toList();
+            booksDTOList = this.books.stream().map(BookEntity::toDto).toList();
         }
         return new PublisherDTO(
                 this.id,

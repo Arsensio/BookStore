@@ -7,8 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveUserDTO {
-    private Long id;
-    private String userName;
+    private String username;
     private String password;
     private String role;
     private boolean isBlocked;

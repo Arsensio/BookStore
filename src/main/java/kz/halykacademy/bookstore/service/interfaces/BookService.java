@@ -1,11 +1,15 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
-import kz.halykacademy.bookstore.models.*;
-import kz.halykacademy.bookstore.store.interfaces.*;
+import kz.halykacademy.bookstore.models.AuthorEntity;
+import kz.halykacademy.bookstore.models.BookEntity;
+import kz.halykacademy.bookstore.models.GenreEntity;
+import kz.halykacademy.bookstore.store.interfaces.AuthorRepository;
+import kz.halykacademy.bookstore.store.interfaces.BookRepository;
+import kz.halykacademy.bookstore.store.interfaces.GenreRepository;
+import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +21,17 @@ import java.util.stream.Collectors;
 
 public interface BookService {
 
-    public List<BookDTO> findAll();
+    List<BookDTO> findAll();
 
-    public BookDTO findOne(Long id) throws Throwable;
+    BookDTO findOne(Long id) throws Throwable;
 
-    public List<BookDTO> findOneByName(String name);
+    List<BookDTO> findOneByName(String name);
 
-    public BookDTO save(SaveBookDTO book);
+    BookDTO save(SaveBookDTO book);
 
-    public void delete(Long id);
+    void delete(Long id);
 
-    public BookDTO update(SaveBookDTO saveBookDTO);
+    BookDTO update(Long id,SaveBookDTO saveBookDTO);
 
     LinkedHashSet<BookDTO> findAllByGenre(List<Long> ids);
 
@@ -39,16 +43,12 @@ public interface BookService {
 @AllArgsConstructor
 class BookServiceImpl implements BookService {
 
-    @Autowired
     private BookRepository repository;
 
-    @Autowired
     private AuthorRepository authorRepository;
 
-    @Autowired
     private PublisherRepository publisherRepository;
 
-    @Autowired
     private GenreRepository genreRepository;
 
     @Override
@@ -61,8 +61,6 @@ class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO findOne(Long id) throws Throwable {
-//        System.out.println(repository.findById(id).get());
-
         return repository.findById(id)
                 .map(BookEntity::toDto)
                 .orElseThrow((Supplier<Throwable>) () -> new Exception("Author with id not found"));
@@ -82,30 +80,30 @@ class BookServiceImpl implements BookService {
         System.out.println(saveBook.getPublisherId());
         BookEntity saved = repository.save(
                 new BookEntity(
-                        saveBook.getId(),
+                        null,
                         saveBook.getPrice(),
                         saveBook.getBookQuantity(),
                         publisherRepository.findById(saveBook.getPublisherId()).get(),
                         saveBook.getName(),
-                        saveBook.getNumOfpage(),
+                        saveBook.getNumOfPages(),
+                        saveBook.getBookImage(),
                         saveBook.getYearOfIssue(),
                         getAuthors(saveBook.getAuthors()),
-                        getGeners(saveBook),
+                        getGenres(saveBook.getGenres()),
                         null
                 )
         );
         return saved.toDto();
     }
 
-    public List<AuthorEntity> getAuthors(List<Long> ids) {
-        LinkedHashSet<AuthorEntity> authorEntities = new LinkedHashSet<>();
+    public List<AuthorEntity> getAuthors(LinkedHashSet<Long> ids) {
+        List<AuthorEntity> authorEntities = new ArrayList<>();
         authorEntities.addAll(authorRepository.findAllByIdIn(ids).stream().toList());
-
-        return new ArrayList<>(authorEntities);
+        return authorEntities;
     }
 
-    public List<GenreEntity> getGeners(SaveBookDTO saveBookDTO) {
-        return saveBookDTO.getGenres().stream().map(id -> genreRepository.findById(id).get()).collect(Collectors.toList());
+    public List<GenreEntity> getGenres(LinkedHashSet<Long> ids) {
+        return genreRepository.findAllByIdIn(ids);
     }
 
     @Override
@@ -115,23 +113,19 @@ class BookServiceImpl implements BookService {
 
 
     @Override
-    public BookDTO update(SaveBookDTO saveBookDTO) {
-//        PublisherEntity publisher = null;
-//        if (saveBookDTO.getPublisherId() != null && publisherRepository.findById(saveBookDTO.getPublisher().getId()) != null) {
-//            publisher = publisherRepository.findById(saveBookDTO.getPublisher().getId()).get();
-//        }
-//        PublisherEntity finalPublisher = publisher;
-        repository.findById(saveBookDTO.getId()).ifPresent(it -> {
+    public BookDTO update(Long id,SaveBookDTO saveBookDTO) {
+        repository.findById(id).ifPresent(it -> {
             it.setName(saveBookDTO.getName());
             it.setPublisher(publisherRepository.findById(saveBookDTO.getPublisherId()).get());
             it.setAuthors(getAuthors(saveBookDTO.getAuthors()));
+            it.setNumOfpage(saveBookDTO.getNumOfPages());
             it.setPrice(saveBookDTO.getPrice());
             it.setYearOfIssue(saveBookDTO.getYearOfIssue());
-            it.setGenres(getGeners(saveBookDTO));
+            it.setGenres(getGenres(saveBookDTO.getGenres()));
             repository.saveAndFlush(it);
         });
 
-        return repository.findById(saveBookDTO.getId()).get().toDto();
+        return repository.findById(id).get().toDto();
     }
 
     @Override
@@ -152,7 +146,7 @@ class BookServiceImpl implements BookService {
         if (fio.length == 1) {
             booksFound.addAll(repository.findBookEntitiesByAuthors(fio[0]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
         } else if (fio.length == 2) {
-            booksFound.addAll(repository.findBookEntitiesByAuthorsFullName(fio[0], fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
+            booksFound.addAll(repository.findBookEntitiesByAuthorsFirstAndLastName(fio[0], fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
         }
 
         System.out.println(booksFound);

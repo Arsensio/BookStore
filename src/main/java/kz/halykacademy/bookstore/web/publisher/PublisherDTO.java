@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.web.publisher;
 
 
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,6 @@ import java.util.List;
 public class PublisherDTO {
 
     private Long id;
-    private String name;
-    private List<String>listOfBook;
+    private String label;
+    private List<BookDTO>listOfBook;
 }

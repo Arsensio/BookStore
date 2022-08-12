@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -21,28 +20,19 @@ public class BookDTO {
 
     private String publisher;
 
-
     private String name;
 
-    private int numOfpage;
+    private int numOfpages;
+
+    private String bookImage;
 
     private List<String> authorName;
 
     private Integer yearOfIssue;
 
-    private List<String>genres;
+    private List<String> genres;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BookDTO bookDTO = (BookDTO) o;
-        return id.equals(bookDTO.id);
-    }
+    private Long bookQuantity;
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
+    private List<Long> authorsIds;
 }

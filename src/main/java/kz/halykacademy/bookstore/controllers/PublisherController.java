@@ -3,21 +3,18 @@ package kz.halykacademy.bookstore.controllers;
 import kz.halykacademy.bookstore.service.interfaces.PublisherService;
 import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
 import kz.halykacademy.bookstore.web.publisher.SavePublisherDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/publishers")
+@AllArgsConstructor
 public class PublisherController {
 
-    @Autowired
     private PublisherService service;
-
-    public PublisherController(PublisherService service) {
-        this.service = service;
-    }
 
     @GetMapping
     public List<PublisherDTO> listAll() {
@@ -30,10 +27,9 @@ public class PublisherController {
     }
 
     @GetMapping("/name")
-    public List<PublisherDTO> getByName(@RequestParam("name")String name) {
+    public List<PublisherDTO> getByName(@RequestParam("name") String name) {
         return service.getByName(name);
     }
-
 
     @PostMapping
     public PublisherDTO save(@RequestBody SavePublisherDTO savePublisher) {
@@ -41,12 +37,12 @@ public class PublisherController {
     }
 
     @PutMapping("/{id}")
-    public PublisherDTO update(@PathVariable Long id,@RequestBody SavePublisherDTO savePublisherDTO){
-        return service.update(savePublisherDTO);
+    public PublisherDTO update(@PathVariable Long id, @RequestBody SavePublisherDTO savePublisherDTO) {
+        return service.update(id,savePublisherDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 }

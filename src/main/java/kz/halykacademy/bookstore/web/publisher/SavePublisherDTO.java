@@ -13,7 +13,5 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class SavePublisherDTO  {
-    Long id;
     String name;
-    List<BookEntity>books;
 }

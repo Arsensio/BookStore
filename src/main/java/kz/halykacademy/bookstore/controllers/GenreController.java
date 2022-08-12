@@ -5,19 +5,18 @@ import kz.halykacademy.bookstore.models.GenreEntity;
 import kz.halykacademy.bookstore.service.interfaces.GenreService;
 import kz.halykacademy.bookstore.web.genre.GenreDTO;
 import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
+@AllArgsConstructor
 @RequestMapping("/genres")
 public class GenreController {
 
-
-    @Autowired
     private GenreService service;
-
 
     @GetMapping
     public List<GenreDTO> listAll() {
@@ -34,15 +33,14 @@ public class GenreController {
         return service.findAllByName(name);
     }
 
-
     @PostMapping
     public GenreEntity save(@RequestBody SaveGenreDTO saveGenreDTO) {
         return service.save(saveGenreDTO);
     }
 
     @PutMapping
-    public GenreDTO update(@RequestBody SaveGenreDTO saveGenreDTO){
-        return service.update(saveGenreDTO);
+    public GenreDTO update(@PathVariable Long id,@RequestBody SaveGenreDTO saveGenreDTO){
+        return service.update(id,saveGenreDTO);
     }
 
     @DeleteMapping("/{id}")

@@ -1,10 +1,11 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
+import kz.halykacademy.bookstore.exceptions.ResourceNotFoundException;
 import kz.halykacademy.bookstore.models.PublisherEntity;
 import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
 import kz.halykacademy.bookstore.web.publisher.PublisherDTO;
 import kz.halykacademy.bookstore.web.publisher.SavePublisherDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,23 +14,23 @@ import java.util.function.Supplier;
 
 public interface PublisherService {
 
-    public List<PublisherDTO> findAll();
+    List<PublisherDTO> findAll();
 
-    public PublisherDTO findOne(Long id) throws Throwable;
+    PublisherDTO findOne(Long id) throws Throwable;
 
-    public List<PublisherDTO> getByName(String name);
+    List<PublisherDTO> getByName(String name);
 
-    public PublisherDTO save(SavePublisherDTO savePublisherDTO);
+    PublisherDTO save(SavePublisherDTO savePublisherDTO);
 
-    public PublisherDTO update(SavePublisherDTO savePublisherDTO);
+    PublisherDTO update(Long id,SavePublisherDTO savePublisherDTO);
 
-    public void delete(Long id);
+    void delete(Long id);
 }
 
 @Service
+@AllArgsConstructor
 class PublisherServiceImpl implements PublisherService {
 
-    @Autowired
     PublisherRepository repository;
 
 
@@ -45,7 +46,7 @@ class PublisherServiceImpl implements PublisherService {
     public PublisherDTO findOne(Long id) throws Throwable {
         return repository.findById(id)
                 .map(PublisherEntity::toDTO)
-                .orElseThrow((Supplier<Throwable>) () -> new Exception("Author with id not found"));
+                .orElseThrow((Supplier<Throwable>) () -> new ResourceNotFoundException("Author with id not found"));
     }
 
     @Override
@@ -61,7 +62,7 @@ class PublisherServiceImpl implements PublisherService {
 
         PublisherEntity saved = repository.save(
                 new PublisherEntity(
-                        savePublisherDTO.getId(),
+                        null,
                         savePublisherDTO.getName()
                 )
         );
@@ -69,16 +70,14 @@ class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public PublisherDTO update(SavePublisherDTO savePublisherDTO) {
-
-        repository.findById(savePublisherDTO.getId()).ifPresentOrElse(it -> {
+    public PublisherDTO update(Long id,SavePublisherDTO savePublisherDTO) {
+        repository.findById(id).ifPresentOrElse(it -> {
             it.setName(savePublisherDTO.getName());
             repository.saveAndFlush(it);
         }, () -> {
-            System.out.println("no such publisher");
+            throw new ResourceNotFoundException("no such publisher");
         });
-
-        return repository.findById(savePublisherDTO.getId()).get().toDTO();
+        return repository.findById(id).get().toDTO();
     }
 
     @Override

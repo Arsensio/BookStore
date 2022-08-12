@@ -2,15 +2,11 @@ package kz.halykacademy.bookstore.controllers;
 
 
 import kz.halykacademy.bookstore.models.OrderEntity;
-import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.service.interfaces.OrderService;
-import kz.halykacademy.bookstore.service.interfaces.UserService;
 import kz.halykacademy.bookstore.web.order.OrderDTO;
 import kz.halykacademy.bookstore.web.order.SaveOrderDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +16,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/orders")
+@AllArgsConstructor
 public class OrderController {
-    @Autowired
+
     OrderService orderService;
 
     @GetMapping("/{id}")
-    public OrderDTO findOne(@RequestParam Long id) throws Throwable {
+    public OrderDTO findOne(@PathVariable Long id) throws Throwable {
         return orderService.findOne(id);
     }
 
@@ -52,7 +49,7 @@ public class OrderController {
         if (!ordersIds.contains(id)) {
             throw new Exception("GET OUT THE WAY");
         }
-        System.out.println("AM HERE");
+
         return orderService.update(userDetails, id, orderDTO);
     }
 

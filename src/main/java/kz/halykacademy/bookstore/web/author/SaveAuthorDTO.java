@@ -15,16 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class SaveAuthorDTO {
-    private Long id;
 
     private String firstName;
-
     private String lastName;
-
     private String patronymic;
-
-    private List<Long> booksIds;
-
     @JsonFormat(pattern = "dd/MM/yyyy")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;

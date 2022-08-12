@@ -38,6 +38,12 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 
+server:
+  port: 4000
+  cors:
+    origins:
+      - https://localhost:3000
+      - http://localhost:3000
 jwt:
   token:
     secret: banana

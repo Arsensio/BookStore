@@ -2,14 +2,15 @@ package kz.halykacademy.bookstore.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "authors")
@@ -40,7 +41,6 @@ public class AuthorEntity {
     @ManyToMany(mappedBy = "authors")
     private List<BookEntity> books;
 
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -59,9 +59,14 @@ public class AuthorEntity {
 
     public AuthorDTO toDto() {
 
-        List<String> books = List.of();
-        if (this.books != null)
-            books = this.books.stream().map(BookEntity::getName).toList();
+        List<BookDTO> books = List.of();
+        LinkedHashSet<String> genres = new LinkedHashSet<>();
+
+        if (this.books != null){
+            books = this.books.stream().map(BookEntity::toDto).toList();
+            genres = getGenres();
+        }
+
 
         return new AuthorDTO(
                 this.id,
@@ -69,8 +74,19 @@ public class AuthorEntity {
                 this.lastName,
                 this.patronymic,
                 this.dateOfBirth,
-                books
+                books,
+                this.firstName+" "+this.lastName+" "+ this.patronymic,
+                genres
+
         );
+    }
+
+    private LinkedHashSet<String> getGenres() {
+        LinkedHashSet<String> genresNames = new LinkedHashSet<>();
+        this.books.forEach(book -> {
+           genresNames.addAll(book.getGenresName());
+        });
+        return genresNames;
     }
 
     public String getFullName(){

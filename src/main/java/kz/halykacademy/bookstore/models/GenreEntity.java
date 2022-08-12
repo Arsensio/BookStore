@@ -7,6 +7,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,6 +34,19 @@ public class GenreEntity {
     public GenreEntity(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GenreEntity that = (GenreEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public GenreDTO toDTO(){

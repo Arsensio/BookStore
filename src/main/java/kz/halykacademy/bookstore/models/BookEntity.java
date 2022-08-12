@@ -1,16 +1,18 @@
 package kz.halykacademy.bookstore.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import kz.halykacademy.bookstore.web.book.BookDTO;
-import lombok.*;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.NaturalIdCache;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -43,6 +45,8 @@ public class BookEntity {
     @Column(name = "num_of_page")
     int numOfpage;
 
+    @Column(name = "book_image")
+    String bookImage;
 
     @Column(name = "year_Of_Issue")
     @Min(1700)
@@ -82,9 +86,12 @@ public class BookEntity {
 
     public BookDTO toDto() {
         List<String> authorDTOList = List.of();
+        List<Long> authorIdsList = List.of();
         if (this.authors != null) {
             authorDTOList = this.authors.stream().map(AuthorEntity::getFullName).toList();
+            authorIdsList =this.authors.stream().map(AuthorEntity::getId).toList();
         }
+
         String publisherName = "";
         if (this.publisher != null) {
             publisherName = this.publisher.getName();
@@ -100,11 +107,18 @@ public class BookEntity {
                 publisherName,
                 this.name,
                 this.numOfpage,
+                this.bookImage,
                 authorDTOList,
                 this.yearOfIssue,
-                genres
+                genres,
+                this.bookQuantity,
+                authorIdsList
         );
 
+    }
+
+    public List<String>getGenresName(){
+        return this.genres.stream().map(GenreEntity::getName).collect(Collectors.toList());
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.validation.constraints.Min;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @Data
@@ -13,15 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 public class SaveBookDTO {
-    private Long id;
     private double price;
     private Long publisherId;
     private String name;
-    private int numOfpage;
+    private int numOfPages;
     private Long bookQuantity;
+    private String bookImage;
     @Min(1700)
     private Integer yearOfIssue;
-    private List<Long>authors;
-    private List<Long>genres;
+    private LinkedHashSet<Long>authors;
+    private LinkedHashSet<Long> genres;
 
 }

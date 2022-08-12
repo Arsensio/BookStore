@@ -2,47 +2,47 @@ package kz.halykacademy.bookstore.service.interfaces;
 
 import kz.halykacademy.bookstore.exceptions.NotEnoughBooksException;
 import kz.halykacademy.bookstore.exceptions.PriceExceedsLimitException;
-import kz.halykacademy.bookstore.models.*;
+import kz.halykacademy.bookstore.models.BookEntity;
+import kz.halykacademy.bookstore.models.OrderEntity;
+import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import kz.halykacademy.bookstore.store.interfaces.OrderRepository;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
 import kz.halykacademy.bookstore.web.order.OrderDTO;
 import kz.halykacademy.bookstore.web.order.SaveOrderDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public interface OrderService {
 
-    public List<OrderDTO> findAll();
+    List<OrderDTO> findAll();
 
-    public OrderDTO findOne(Long id) throws Throwable;
+    OrderDTO findOne(Long id) throws Throwable;
 
-    public OrderDTO save(UserDetails userDetails, SaveOrderDTO saveUserDTO) throws Exception;
+    OrderDTO save(UserDetails userDetails, SaveOrderDTO saveUserDTO) throws Exception;
 
-    public OrderDTO update(UserDetails userEntity, Long id, SaveOrderDTO orderDTO) throws Exception;
+    OrderDTO update(UserDetails userEntity, Long id, SaveOrderDTO orderDTO) throws Exception;
 
-    public OrderDTO updateAdmin(Long id, SaveOrderDTO orderDTO);
+    OrderDTO updateAdmin(Long id, SaveOrderDTO orderDTO);
 
-    public void delete(Long id);
+    void delete(Long id);
 
     List<OrderEntity> findAllByUserId(UserDetails username);
 }
 
 @Service
+@AllArgsConstructor
 class OrderServiceImpl implements OrderService {
-    @Autowired
+
     OrderRepository orderRepository;
 
-    @Autowired
     BookRepository bookRepository;
 
-    @Autowired
     UserRepository userRepository;
 
     @Override
@@ -128,9 +128,7 @@ class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO updateAdmin(Long id, SaveOrderDTO orderDTO) {
         OrderEntity order = orderRepository.findById(id).get();
-
         order.setStatus(orderDTO.getStatus());
-
         return orderRepository.save(new OrderEntity(
                 order.getId(),
                 order.getUserId(),
@@ -151,4 +149,5 @@ class OrderServiceImpl implements OrderService {
         UserEntity user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).get();
         return orderRepository.findAllByUser_id(user.getId());
     }
+
 }

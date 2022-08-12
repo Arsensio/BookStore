@@ -1,31 +1,33 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
+import kz.halykacademy.bookstore.exceptions.ResourceNotFoundException;
 import kz.halykacademy.bookstore.models.GenreEntity;
 import kz.halykacademy.bookstore.store.interfaces.GenreRepository;
 import kz.halykacademy.bookstore.web.genre.GenreDTO;
 import kz.halykacademy.bookstore.web.genre.SaveGenreDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 public interface GenreService {
 
-    public List<GenreDTO> findAll();
+    List<GenreDTO> findAll();
 
-    public GenreEntity findOne(Long id) throws Throwable;
+    GenreEntity findOne(Long id) throws Throwable;
 
-    public List<GenreDTO> findAllByName(String name);
+    List<GenreDTO> findAllByName(String name);
 
-    public GenreEntity save(SaveGenreDTO saveGenre);
+    GenreEntity save(SaveGenreDTO saveGenre);
 
-    public void delete(Long id);
+    void delete(Long id);
 
-    public GenreDTO update( SaveGenreDTO saveGenreDTO);
+    GenreDTO update(Long id,SaveGenreDTO saveGenreDTO);
 }
+
 @Service
+@AllArgsConstructor
 class GenreServiceImpl implements GenreService {
-    @Autowired
     private GenreRepository genreRepository;
 
     @Override
@@ -53,7 +55,7 @@ class GenreServiceImpl implements GenreService {
     public GenreEntity save(SaveGenreDTO saveGenre) {
         GenreEntity saved = genreRepository.save(
                 new GenreEntity(
-                        saveGenre.getId(),
+                        null,
                         saveGenre.getName()
                 )
         );
@@ -66,16 +68,14 @@ class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public GenreDTO update( SaveGenreDTO saveGenreDTO) {
-
-        genreRepository.findById(saveGenreDTO.getId()).ifPresentOrElse(it -> {
+    public GenreDTO update(Long id,SaveGenreDTO saveGenreDTO) {
+        genreRepository.findById(id).ifPresentOrElse(it -> {
             it.setName(saveGenreDTO.getName());
             genreRepository.saveAndFlush(it);
-        },()->{
-            System.out.println("no such publisher");
+        }, () -> {
+            throw new ResourceNotFoundException("No such genre present");
         });
-
-        return genreRepository.findById(saveGenreDTO.getId()).get().toDTO();
+        return genreRepository.findById(id).get().toDTO();
     }
 
 

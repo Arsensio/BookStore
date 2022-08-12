@@ -4,8 +4,7 @@ import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
 import kz.halykacademy.bookstore.web.user.SaveUserDTO;
 import kz.halykacademy.bookstore.web.user.UserDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,31 +16,29 @@ import java.util.stream.Collectors;
 
 public interface UserService {
 
-    public List<UserDTO> findAll();
+    List<UserDTO> findAll();
 
-    public UserDTO findOne(Long id) throws Throwable;
+    UserDTO findOne(Long id) throws Throwable;
 
-    public UserEntity getByName(String name);
+    UserEntity getByName(String name);
 
-    public UserDTO save(SaveUserDTO saveUserDTO);
+    UserDTO save(SaveUserDTO saveUserDTO);
 
-    public UserDTO updateUsername(UserDetails userDetails, SaveUserDTO saveUserDTO);
+    UserDTO updateUsername(UserDetails userDetails, SaveUserDTO saveUserDTO);
 
-    public void delete(Long id);
+    void delete(Long id);
 
-    public UserDTO updatePassword(UserDetails user, SaveUserDTO saveUserDTO);
+    UserDTO updatePassword(UserDetails user, SaveUserDTO saveUserDTO);
 
-    public UserDTO updateRoleandBlocked(UserDetails user, SaveUserDTO saveUserDTO);
+    UserDTO updateRoleAndBlocked(Long id, UserDetails user, SaveUserDTO saveUserDTO);
 }
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     PasswordEncoder encoder;
 
     @PostConstruct
@@ -72,15 +69,12 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(SaveUserDTO saveUserDTO) {
-        System.out.println(saveUserDTO.getUserName());
-        System.out.println(saveUserDTO.getPassword());
-        System.out.println(saveUserDTO.getRole());
-        System.out.println(saveUserDTO.isBlocked());
-        UserEntity saved = userRepository.save(
-                new UserEntity(saveUserDTO.getUserName(), encoder.encode(saveUserDTO.getPassword()) ,"USER", false)
-        );
 
+        UserEntity saved = userRepository.save(
+                new UserEntity(saveUserDTO.getUsername(), encoder.encode(saveUserDTO.getPassword()), "USER", false)
+        );
         return saved.toDTO();
+
     }
 
     @Override
@@ -90,7 +84,7 @@ class UserServiceImpl implements UserService {
         userRepository.save(
                 new UserEntity(
                         user.getId(),
-                        saveUserDTO.getUserName(),
+                        saveUserDTO.getUsername(),
                         user.getPassword(),
                         user.getUserRole(),
                         user.isBlocked()
@@ -123,8 +117,8 @@ class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateRoleandBlocked(UserDetails userDetails, SaveUserDTO saveUserDTO) {
-        UserEntity user = userRepository.findById(saveUserDTO.getId()).get();
+    public UserDTO updateRoleAndBlocked(Long id, UserDetails userDetails, SaveUserDTO saveUserDTO) {
+        UserEntity user = userRepository.findById(id).get();
 
         userRepository.save(
                 new UserEntity(
@@ -135,6 +129,6 @@ class UserServiceImpl implements UserService {
                         saveUserDTO.isBlocked()
                 )
         );
-        return userRepository.findById(user.getId()).get().toDTO();
+        return userRepository.findById(id).get().toDTO();
     }
 }

@@ -11,6 +11,5 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class SaveGenreDTO {
-    Long id;
     String name;
 }
