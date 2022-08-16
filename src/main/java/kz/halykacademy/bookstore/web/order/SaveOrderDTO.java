@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SaveOrderDTO {
-    private Long id;
     private Long user_id;
     private String status;
     private List<Long> books;

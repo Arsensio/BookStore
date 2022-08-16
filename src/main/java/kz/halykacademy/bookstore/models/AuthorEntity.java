@@ -38,7 +38,7 @@ public class AuthorEntity {
     private LocalDate dateOfBirth;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany(mappedBy = "authors",cascade = CascadeType.PERSIST)
     private List<BookEntity> books;
 
     @CreationTimestamp

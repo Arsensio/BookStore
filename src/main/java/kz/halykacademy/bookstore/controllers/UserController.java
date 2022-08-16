@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/update/admin/role/{id}")
-    public UserDTO updateRole(@AuthenticationPrincipal UserDetails user,Long id, @RequestBody SaveUserDTO saveUserDTO) {
+    public UserDTO updateRole(@AuthenticationPrincipal UserDetails user,@PathVariable    Long id, @RequestBody SaveUserDTO saveUserDTO) {
         return userService.updateRoleAndBlocked(id,user, saveUserDTO);
     }
 

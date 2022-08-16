@@ -10,18 +10,20 @@ import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.cglib.core.Converter;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public interface BookService {
 
-    List<BookDTO> findAll();
+    Page<BookDTO> findAll(Pageable pageable);
 
     BookDTO findOne(Long id) throws Throwable;
 
@@ -31,12 +33,12 @@ public interface BookService {
 
     void delete(Long id);
 
-    BookDTO update(Long id,SaveBookDTO saveBookDTO);
+    BookDTO update(Long id, SaveBookDTO saveBookDTO);
 
     LinkedHashSet<BookDTO> findAllByGenre(List<Long> ids);
 
     @Transactional(readOnly = true)
-    List<BookDTO> findAllByAuthors(String name);
+    List<BookDTO> findAllByAuthors(Long name);
 }
 
 @Service
@@ -52,11 +54,17 @@ class BookServiceImpl implements BookService {
     private GenreRepository genreRepository;
 
     @Override
-    public List<BookDTO> findAll() {
-        return repository.findAll()
-                .stream()
-                .map(BookEntity::toDto)
-                .toList();
+    public Page<BookDTO> findAll(Pageable pageable) {
+        Page<BookEntity> found = repository.findAll(pageable);
+
+        Page<BookDTO> converted = found.map(new Function<BookEntity, BookDTO>() {
+            @Override
+            public BookDTO apply(BookEntity entity) {
+                return entity.toDto();
+            }
+        });
+
+        return converted;
     }
 
     @Override
@@ -77,7 +85,6 @@ class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO save(SaveBookDTO saveBook) {
-        System.out.println(saveBook.getPublisherId());
         BookEntity saved = repository.save(
                 new BookEntity(
                         null,
@@ -113,7 +120,8 @@ class BookServiceImpl implements BookService {
 
 
     @Override
-    public BookDTO update(Long id,SaveBookDTO saveBookDTO) {
+    public BookDTO update(Long id, SaveBookDTO saveBookDTO) {
+
         repository.findById(id).ifPresent(it -> {
             it.setName(saveBookDTO.getName());
             it.setPublisher(publisherRepository.findById(saveBookDTO.getPublisherId()).get());
@@ -130,26 +138,45 @@ class BookServiceImpl implements BookService {
 
     @Override
     public LinkedHashSet<BookDTO> findAllByGenre(List<Long> ids) {
-        LinkedHashSet<BookDTO> booksFound = new LinkedHashSet<>();
-        booksFound.addAll(repository.findAllByGenres_IdIn(ids).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-        return booksFound;
+        if (ids.size()==0){
+            List<BookDTO> bookFound = repository.findAll(PageRequest.of(0, 20)).stream().map(BookEntity::toDto).collect(Collectors.toList());
+            return bookFound.stream().collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>();
+        booksFound.addAll(repository.findAllByGenres_IdIn(ids).stream().collect(Collectors.toList()));
+
+        //sort by intersection
+        LinkedHashMap<BookEntity, Integer> map = new LinkedHashMap<>();
+
+        booksFound.forEach(bookDTO -> {
+            map.put(bookDTO, getIntersections(bookDTO, ids));
+            System.out.println(bookDTO.getName() + " " + getIntersections(bookDTO, ids));
+        });
+
+        LinkedHashSet<BookDTO> sorted = new LinkedHashSet<>();
+
+        map.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> sorted.add(x.getKey().toDto()));
+
+        return sorted;
+    }
+
+    public Integer getIntersections(BookEntity book, List<Long> ids) {
+        AtomicInteger count = new AtomicInteger(0);
+
+        ids.forEach(id -> {
+            if (book.getGenresIds().contains(id))
+                count.incrementAndGet();
+        });
+
+        return count.get();
     }
 
     @Override
-    public List<BookDTO> findAllByAuthors(String name) {
-        System.out.println(name);
-
-        String[] fio = name.split(" ");
-
-        List<BookDTO> booksFound = new ArrayList<>();
-
-        if (fio.length == 1) {
-            booksFound.addAll(repository.findBookEntitiesByAuthors(fio[0]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-        } else if (fio.length == 2) {
-            booksFound.addAll(repository.findBookEntitiesByAuthorsFirstAndLastName(fio[0], fio[1]).stream().map(BookEntity::toDto).collect(Collectors.toList()));
-        }
-
-        System.out.println(booksFound);
+    public List<BookDTO> findAllByAuthors(Long id) {
+        List<BookDTO> booksFound = repository.findAllByAuthors_id(id).stream().map(BookEntity::toDto).collect(Collectors.toList());
         return booksFound;
     }
 

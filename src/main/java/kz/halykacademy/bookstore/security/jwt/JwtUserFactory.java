@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 public final class JwtUserFactory {
 
-    public static JwtUser create(UserEntity user){
+    public static JwtUser create(UserEntity user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),

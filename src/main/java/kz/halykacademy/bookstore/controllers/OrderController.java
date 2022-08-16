@@ -6,6 +6,9 @@ import kz.halykacademy.bookstore.service.interfaces.OrderService;
 import kz.halykacademy.bookstore.web.order.OrderDTO;
 import kz.halykacademy.bookstore.web.order.SaveOrderDTO;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/orders")
 @AllArgsConstructor
@@ -27,8 +30,10 @@ public class OrderController {
     }
 
     @GetMapping("/admin/orders")
-    public List<OrderDTO> findAllOrders() {
-        return orderService.findAll();
+    public Page<OrderDTO> findAllOrders(Pageable pageable) {
+        return new PageImpl<>(
+                orderService.findAll().stream().skip(pageable.getOffset()).limit(pageable.getPageSize()).collect(Collectors.toList())
+        );
     }
 
     @GetMapping
@@ -54,8 +59,8 @@ public class OrderController {
     }
 
     @PutMapping("update/admin/{id}")
-    public OrderDTO adminUpdate(@PathVariable Long id, @RequestBody SaveOrderDTO orderDTO) throws Exception {
-        return orderService.updateAdmin(id, orderDTO);
+    public OrderDTO adminUpdate(@PathVariable Long id, @RequestBody OrderDTO status) throws Exception {
+        return orderService.updateAdmin(id, status);
     }
 
     @DeleteMapping("/{id}")

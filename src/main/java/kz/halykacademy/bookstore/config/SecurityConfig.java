@@ -12,13 +12,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
 
     private static final String ADMIN_ENDPOINT = "";
@@ -30,11 +27,6 @@ public class SecurityConfig  {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
-    //    @Bean
-//    @Override
-//    protected AuthenticationManager authenticationManager() throws Exception {
-//        return super.authenticationManager();
-//    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -63,26 +55,4 @@ public class SecurityConfig  {
                 .apply(new JwtConfigurer(jwtTokenProvider)).and().build();
     }
 
-
-//
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.
-//                httpBasic().disable()
-//                .csrf().disable()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers(LOGIN_ENDPOINT).permitAll()
-//                .antMatchers(HttpMethod.POST, "/users").permitAll()
-//                .antMatchers(HttpMethod.GET, "/books/**", "/authors/**", "/publishers/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/users/admin/**", "/orders/admin/orders").hasAuthority("ADMIN")
-//                .antMatchers(HttpMethod.PUT, "/orders/update/admin/{id}", "users/update/admin/{id}", "/users/update/admin/role").hasAuthority("ADMIN")
-//                .antMatchers(HttpMethod.GET, "/orders/{id}", "/users").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers(HttpMethod.PUT, "/orders/update/{id}", "users/update/username").hasAnyAuthority("USER", "ADMIN")
-//                .antMatchers(HttpMethod.POST, "/orders").hasAnyAuthority("USER", "ADMIN")
-//                .anyRequest().authenticated()
-//                .and()
-//                .apply(new JwtConfigurer(jwtTokenProvider));
-//    }
 }

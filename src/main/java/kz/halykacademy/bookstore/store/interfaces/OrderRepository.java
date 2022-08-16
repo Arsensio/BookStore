@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.store.interfaces;
 
 import kz.halykacademy.bookstore.models.OrderEntity;
+import kz.halykacademy.bookstore.models.UserEntity;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,8 +16,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     @Override
     List<OrderEntity> findAll();
 
-    @Query("FROM OrderEntity WHERE userId = ?1")
-    List<OrderEntity> findAllByUser_id(Long user_id);
+    List<OrderEntity> findAllByUser(UserEntity user);
 
 
 }

@@ -1,6 +1,11 @@
 package kz.halykacademy.bookstore.store.interfaces;
 
+import kz.halykacademy.bookstore.models.AuthorEntity;
 import kz.halykacademy.bookstore.models.BookEntity;
+import kz.halykacademy.bookstore.models.GenreEntity;
+import kz.halykacademy.bookstore.web.book.BookDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,15 +17,11 @@ import java.util.List;
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
+    Page<BookEntity> findAll(Pageable pageable);
+
+    List<BookEntity> findAllByAuthors_id(Long authorId);
 
     List<BookEntity> findAllByNameContainingIgnoreCase(@Param("name") String name);
-
-    @Query(value = "SELECT * FROM books INNER JOIN author_book_table abt on books.id = abt.book_id INNER JOIN authors a on a.id = abt.author_id WHERE first_name LIKE %?1% OR last_name LIKE %?1% OR patronymic LIKE %?1%", nativeQuery = true)
-    List<BookEntity> findBookEntitiesByAuthors(@Param("firstName") String firstName);
-
-    @Query(value = "SELECT * FROM books INNER JOIN author_book_table abt on books.id = abt.book_id INNER JOIN authors a on a.id = abt.author_id WHERE (first_name LIKE %?1% AND last_name LIKE %?2%) OR (last_name LIKE  %?1% AND first_name LIKE  %?2%  )", nativeQuery = true)
-    List<BookEntity> findBookEntitiesByAuthorsFirstAndLastName(@Param("firstName") String firstName, @Param("lastName") String lastName);
-
 
     List<BookEntity> findAllByGenres_IdIn(List<Long> genresIds);
 

@@ -4,7 +4,10 @@ import kz.halykacademy.bookstore.service.interfaces.BookService;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashSet;
@@ -20,8 +23,8 @@ public class BookController {
     private BookService service;
 
     @GetMapping
-    public List<BookDTO> listAll() {
-        return service.findAll();
+    public ResponseEntity<Page<BookDTO>> listAll(Pageable pageable) {
+        return new ResponseEntity<>(service.findAll(pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -34,9 +37,9 @@ public class BookController {
         return service.findOneByName(name);
     }
 
-    @GetMapping("/authors")
-    public List<BookDTO> getByAuthors(@RequestParam("name") String name) {
-        return service.findAllByAuthors(name);
+    @GetMapping("/authors/{id}")
+    public List<BookDTO> getByAuthors(@PathVariable Long id) {
+        return service.findAllByAuthors(id);
     }
 
     @PostMapping
@@ -50,12 +53,12 @@ public class BookController {
     }
 
     @PutMapping("/update/{id}")
-    public BookDTO update(@PathVariable Long id,@RequestBody SaveBookDTO saveBookDTO) {
-        return service.update(id,saveBookDTO);
+    public BookDTO update(@PathVariable Long id, @RequestBody SaveBookDTO saveBookDTO) {
+        return service.update(id, saveBookDTO);
     }
 
     @GetMapping("/genres")
-    public LinkedHashSet<BookDTO> getByGenre(@RequestBody List<Long> genresId) {
-        return service.findAllByGenre(genresId);
+    public LinkedHashSet<BookDTO> getByGenre(@RequestParam(name = "ids") List<Long> ids) {
+        return service.findAllByGenre(ids);
     }
 }

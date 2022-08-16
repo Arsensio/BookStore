@@ -345,6 +345,17 @@ paths:
     get:
       tags:
         - publishers
+      parameters:
+        - name: page
+          in: query
+          description: The page which you wanna get
+          schema:
+            type: integer
+        - name: size
+          in: query
+          description: The amount of elements in one page
+          schema:
+            type: integer
       responses:
         200:
           description: Successfully returned Publisher
@@ -704,7 +715,7 @@ paths:
                   $ref: '#/components/schemas/userDTO'
         400:
           description: username already registered
-  
+
   /users/update/password:
     description: update current user's password
     put:
@@ -994,8 +1005,8 @@ components:
 
     #--------------------------------------------------------------------------------------
     # ----------------------------------Author---------------------------------------------
-    
-    
+
+
     authorDTO:
       type: object
       properties:
@@ -1077,7 +1088,7 @@ components:
         name:
           type: string
           example: mystic
-    
+
     saveGenreDTO:
       type: object
       properties:

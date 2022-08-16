@@ -1,7 +1,6 @@
 package kz.halykacademy.bookstore.security.jwt;
 
 import io.jsonwebtoken.*;
-import kz.halykacademy.bookstore.exceptions.BlockedUserException;
 import kz.halykacademy.bookstore.exceptions.JwtAuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -55,7 +53,6 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
 
-        System.out.println(userDetails.getUsername() + "; " + userDetails.getAuthorities().toString());
 
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -66,9 +63,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
-        System.out.println("##################" +bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            System.out.println(bearerToken);
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;

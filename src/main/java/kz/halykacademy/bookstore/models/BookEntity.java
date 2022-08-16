@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
-@NaturalIdCache
-@Cacheable
 public class BookEntity {
 
     @Id
@@ -67,6 +66,8 @@ public class BookEntity {
     List<GenreEntity> genres;
 
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "book",cascade =CascadeType.MERGE)
     List<OrderBookEntity> orders = new ArrayList<>();
 
@@ -119,6 +120,9 @@ public class BookEntity {
 
     public List<String>getGenresName(){
         return this.genres.stream().map(GenreEntity::getName).collect(Collectors.toList());
+    }
+    public List<Long>getGenresIds(){
+        return this.genres.stream().map(GenreEntity::getId).collect(Collectors.toList());
     }
 
     @Override

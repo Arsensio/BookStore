@@ -3,13 +3,18 @@ package kz.halykacademy.bookstore.controllers;
 import kz.halykacademy.bookstore.service.interfaces.AuthorService;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:3000/")
 @RestController
@@ -20,9 +25,10 @@ public class AuthorController {
     AuthorService authorService;
 
     @GetMapping
-    public List<AuthorDTO> listAll() {
-        return authorService.findAll();
+    public ResponseEntity<Page<AuthorDTO>> listAll(Pageable pageable) {
+        return new ResponseEntity<>(authorService.findAll(pageable), HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public AuthorDTO getOne(@PathVariable Long id) throws Throwable {
@@ -31,8 +37,7 @@ public class AuthorController {
 
     @GetMapping("/name")
     public List<AuthorDTO> getByName(@RequestParam("name") String name) {
-        System.out.println(name);
-        return authorService.findAllByFirstName(name);
+        return authorService.findAllByFullName(name);
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 package kz.halykacademy.bookstore.controllers;
 
 
+import kz.halykacademy.bookstore.exceptions.BlockedUserException;
 import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.security.jwt.JwtTokenProvider;
 import kz.halykacademy.bookstore.service.interfaces.UserService;
@@ -36,15 +37,17 @@ public class AuthenticationController {
     public ResponseEntity login(@RequestBody AuthenticationRequestDTO requestDTO) {
         try {
             String username = requestDTO.getUsername();
+            UserEntity user = userService.getByName(username);
+
+            if (user.isBlocked())
+                throw new BlockedUserException("User is blocked!");
 
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDTO.getPassword()));
 
-            UserEntity user = userService.getByName(username);
             if (user == null) {
                 throw new UsernameNotFoundException("User with" + requestDTO.getUsername() + " not Found");
             }
 
-            System.out.println(username + "; " + user.getUserRole());
             String token = jwtTokenProvider.createToken(username, user.getUserRole());
 
             Map<Object, Object> response = new HashMap<>();
