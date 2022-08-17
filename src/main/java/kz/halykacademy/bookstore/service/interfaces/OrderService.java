@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
+import kz.halykacademy.bookstore.exceptions.ChangeSomeoneResourceExcetion;
 import kz.halykacademy.bookstore.exceptions.NotEnoughBooksException;
 import kz.halykacademy.bookstore.exceptions.PriceExceedsLimitException;
 import kz.halykacademy.bookstore.models.BookEntity;
@@ -88,20 +89,16 @@ class OrderServiceImpl implements OrderService {
     public OrderDTO update(UserDetails userDetails, Long id, SaveOrderDTO orderDTO) throws Exception {
         UserEntity user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).get();
 
-        System.out.println("UPDATE ORDER");
         if (orderRepository.findAllByUser(user).contains(id))
-            throw new Exception("GET OUT THE WAY");
+            throw new ChangeSomeoneResourceExcetion("GET OUT THE WAY");
 
         OrderEntity order = orderRepository.findById(id).get();
 
-        System.out.println("FIND BY ID");
         returnBook(order.getBooks());
 
         List<BookEntity> foundBooks = findBooks(orderDTO.getBooks());
-        System.out.println("#1");
         List<Long> amounts = orderDTO.getQuantity();
 
-        System.out.println("#2");
 
         double check = 0;
 
@@ -162,15 +159,14 @@ class OrderServiceImpl implements OrderService {
         return orderRepository.findAllByUser(user);
     }
 
-    private void returnBook(List<OrderBookEntity>list){
-        list.forEach(book->{
+    private void returnBook(List<OrderBookEntity> list) {
+        list.forEach(book -> {
             BookEntity bookEntity = book.getBook();
             bookEntity.setBookQuantity(
-                    bookEntity.getBookQuantity() +  book.getBookQuantity()
+                    bookEntity.getBookQuantity() + book.getBookQuantity()
             );
             book.setBookQuantity(0L);
         });
-        System.out.println("RETURN BOOK");
     }
 
 }

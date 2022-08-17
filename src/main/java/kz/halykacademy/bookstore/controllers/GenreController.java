@@ -29,7 +29,7 @@ public class GenreController {
     }
 
     @GetMapping("/name")
-    public List<GenreDTO> getByName(@RequestParam("name")String name) {
+    public List<GenreDTO> getByName(@RequestParam("name") String name) {
         return service.findAllByName(name);
     }
 
@@ -39,12 +39,12 @@ public class GenreController {
     }
 
     @PutMapping
-    public GenreDTO update(@PathVariable Long id,@RequestBody SaveGenreDTO saveGenreDTO){
-        return service.update(id,saveGenreDTO);
+    public GenreDTO update(@PathVariable Long id, @RequestBody SaveGenreDTO saveGenreDTO) {
+        return service.update(id, saveGenreDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 }

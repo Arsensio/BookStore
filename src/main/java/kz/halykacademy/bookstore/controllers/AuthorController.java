@@ -4,6 +4,7 @@ import kz.halykacademy.bookstore.service.interfaces.AuthorService;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
 import kz.halykacademy.bookstore.web.book.BookDTO;
+import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -50,13 +51,13 @@ public class AuthorController {
         authorService.delete(id);
     }
 
-    @PutMapping
-    public void update(@PathVariable Long id, @RequestBody SaveAuthorDTO saveAuthorDTO) {
-        authorService.update(id, saveAuthorDTO);
+    @PutMapping("/{id}")
+    public AuthorDTO update(@PathVariable Long id, @RequestBody SaveAuthorDTO saveAuthorDTO) {
+        return authorService.update(id, saveAuthorDTO);
     }
 
     @GetMapping("/genre")
-    public LinkedHashSet<AuthorDTO> getByGenre(@RequestBody List<Long> ids) {
+    public LinkedHashSet<AuthorDTO> getByGenre(@RequestParam List<Long> ids) {
         return authorService.findAllByGenre(ids);
     }
 }

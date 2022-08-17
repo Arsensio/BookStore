@@ -10,8 +10,9 @@ import kz.halykacademy.bookstore.store.interfaces.PublisherRepository;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import kz.halykacademy.bookstore.web.book.SaveBookDTO;
 import lombok.AllArgsConstructor;
-import org.springframework.cglib.core.Converter;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,7 +139,7 @@ class BookServiceImpl implements BookService {
 
     @Override
     public LinkedHashSet<BookDTO> findAllByGenre(List<Long> ids) {
-        if (ids.size()==0){
+        if (ids.size() == 0) {
             List<BookDTO> bookFound = repository.findAll(PageRequest.of(0, 20)).stream().map(BookEntity::toDto).collect(Collectors.toList());
             return bookFound.stream().collect(Collectors.toCollection(LinkedHashSet::new));
         }

@@ -95,6 +95,76 @@ INSERT INTO author_book_table(book_id, author_id) VALUES (26,42);
 -- 30
 INSERT INTO author_book_table(book_id, author_id) VALUES (26,42);
 
+-- 31
+INSERT INTO author_book_table(book_id, author_id) VALUES (27,38);
+
+-- 32
+INSERT INTO author_book_table(book_id, author_id) VALUES (28,45);
+
+-- 33
+INSERT INTO author_book_table(book_id, author_id) VALUES (29,36);
+
+-- 34
+INSERT INTO author_book_table(book_id, author_id) VALUES (30,37);
+
+-- 35
+INSERT INTO author_book_table(book_id, author_id) VALUES (31,36);
+
+-- 36
+INSERT INTO author_book_table(book_id, author_id) VALUES (32,36);
+
+-- 37
+INSERT INTO author_book_table(book_id, author_id) VALUES (33,34);
+
+-- 38
+INSERT INTO author_book_table(book_id, author_id) VALUES (33,35);
+
+-- 39
+INSERT INTO author_book_table(book_id, author_id) VALUES (34,31);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (35,30);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (36,46);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (37,33);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (38,32);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (39,29);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (40,28);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (41,27);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (42,26);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (43,25);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (44,28);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (45,24);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (46,23);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (47,22);
+
+-- 40
+INSERT INTO author_book_table(book_id, author_id) VALUES (48,22);
+
+
 
 
 

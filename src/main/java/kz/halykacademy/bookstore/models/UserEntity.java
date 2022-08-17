@@ -24,13 +24,13 @@ public class UserEntity {
     @Column(name = "user_name", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "user_role",nullable = false)
+    @Column(name = "user_role", nullable = false)
     private String userRole;
 
-    @Column(name = "is_blocked",nullable = false)
+    @Column(name = "is_blocked", nullable = false)
     private boolean isBlocked;
 
     public UserEntity(String username, String password, String userRole, boolean isBlocked) {

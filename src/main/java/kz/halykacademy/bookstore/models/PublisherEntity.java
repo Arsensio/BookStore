@@ -18,15 +18,15 @@ import java.util.List;
 @Entity
 @DynamicUpdate
 @Table(name = "publishers")
-public class PublisherEntity  {
+public class PublisherEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(name = "publishers_name",nullable = false)
+    @Column(name = "publishers_name", nullable = false)
     String name;
 
-    public PublisherEntity(Long id, String name){
+    public PublisherEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -36,13 +36,13 @@ public class PublisherEntity  {
     List<BookEntity> books = new ArrayList<>();
 
 
-    public PublisherEntity(Long id){
+    public PublisherEntity(Long id) {
         this.id = id;
     }
 
-    public PublisherDTO toDTO(){
-        List<BookDTO>booksDTOList = List.of();
-        if (this.books != null){
+    public PublisherDTO toDTO() {
+        List<BookDTO> booksDTOList = List.of();
+        if (this.books != null) {
             booksDTOList = this.books.stream().map(BookEntity::toDto).toList();
         }
         return new PublisherDTO(

@@ -8,7 +8,7 @@ info:
     email: arsenulykbekov9@gmail.com
 
 servers:
-  - url: "http://localhost:8080/"
+  - url: "http://localhost:4000"
 
 paths:
   /books:
@@ -139,17 +139,17 @@ paths:
                 items:
                   $ref: '#/components/schemas/bookDTO'
 
-  /books/authors:
+  /books/author/{id}:
     description: Get, All Boooks based with author name containing on name query parameter
     get:
       tags:
         - books
       parameters:
-        - in: query
-          name: name
+        - in: path
+          name: id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
           description: Successfully returned books
@@ -160,14 +160,14 @@ paths:
                 items:
                   $ref: '#/components/schemas/bookDTO'
 
-  /books/genre:
+  /books/genres:
     description: Get, All Boooks based on list of genreson name query parameter
     get:
       tags:
         - books
       parameters:
         - in: query
-          name: values
+          name: ids
           required: true
           schema:
             type: array
@@ -321,7 +321,7 @@ paths:
         - authors
       parameters:
         - in: query
-          name: values
+          name: ids
           required: true
           schema:
             type: array
@@ -896,6 +896,65 @@ paths:
                 items:
                   $ref: '#/components/schemas/orderDTO'
 
+  # --------------------------------------Cart------------------------------------------
+  # ------------------------------------------------------------------------------------
+
+  /cart:
+    description: Show all contetnt which in cart of logined user
+    get:
+      tags:
+        - cart
+      responses:
+        200:
+          description: return a current registered user's orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/cartDTO'
+    post:
+      tags:
+        - cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/saveCartDTO'
+      responses:
+        200:
+          description: return new order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/orderDTO'
+        400:
+          description: bad request
+
+    delete:
+      description: Delete all in cart by user id
+      tags:
+        - cart
+      responses:
+        200:
+          description: do not return something
+
+  /cart/{id}:
+    description: delete cart content by id
+    delete:
+      tags:
+        - cart
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: succesfully deleted
 
   # -------------------------------------------------------------------------------------
   # -----------------------------------Authentication--------------------------------------
@@ -1051,7 +1110,7 @@ components:
         dateOfBirth:
           type: string
           format: date
-          example: 1828-09-09
+          example: 01/03/1968
 
 
     # -------------------------------------------------------------------------------------
@@ -1186,6 +1245,35 @@ components:
           items:
             type: integer
             example: [2,2]
+
+
+    # ---------------------------------------Cart-----------------------------------------
+    # ------------------------------------------------------------------------------------
+    cartDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 17
+        userId:
+          type: integer
+          example: 1
+        bookId:
+          type: object
+          $ref: '#/components/schemas/bookDTO'
+        quantity:
+          type: integer
+          example: 2
+
+    saveCartDTO:
+      type: object
+      properties:
+        bookId:
+          type: integer
+          example: 17
+        quantity:
+          type: integer
+          example: 1
 
     # -------------------------------------------------------------------------------------
     # ------------------------------------Authentication-------------------------------------

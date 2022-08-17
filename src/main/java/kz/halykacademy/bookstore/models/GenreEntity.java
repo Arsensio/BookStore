@@ -26,10 +26,9 @@ public class GenreEntity {
     private String name;
 
 
-
     @JsonIgnore
     @ManyToMany(mappedBy = "genres")
-    private List<BookEntity>books;
+    private List<BookEntity> books;
 
     public GenreEntity(Long id, String name) {
         this.id = id;
@@ -49,7 +48,7 @@ public class GenreEntity {
         return Objects.hash(id);
     }
 
-    public GenreDTO toDTO(){
+    public GenreDTO toDTO() {
         return new GenreDTO(
                 this.id,
                 this.name

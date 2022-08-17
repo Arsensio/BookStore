@@ -26,21 +26,21 @@ public class CartController {
 
     @GetMapping("/admin")
     public List<CartDTO> findAll() {
-      return cartService.findAll();
+        return cartService.findAll();
     }
 
     @GetMapping
-    public List<CartDTO> findAllUsers(@AuthenticationPrincipal UserDetails userDetails){
+    public List<CartDTO> findAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
         return cartService.findAllByUserId(userDetails);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
+    public void delete(@PathVariable Long id) {
         cartService.delete(id);
     }
 
     @DeleteMapping
-    public void deleteAll(@AuthenticationPrincipal UserDetails userDetails){
+    public void deleteAll(@AuthenticationPrincipal UserDetails userDetails) {
         cartService.deleteAll(userDetails);
     }
 

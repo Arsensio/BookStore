@@ -55,3 +55,75 @@ INSERT INTO book_genre_table(book_id, genre_id) VALUES (22,4);
 INSERT INTO book_genre_table(book_id, genre_id) VALUES (23,2);
 
 INSERT INTO book_genre_table(book_id, genre_id) VALUES (23,4);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (24,5);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (25,5);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (25,9);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (26,5);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (27,5);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (28,5);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (29,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (30,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (30,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (31,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (31,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (32,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (33,1);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (33,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (34,7);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (34,9);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (35,7);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (36,7);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (37,7);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (38,7);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (38,9);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (39,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (40,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (41,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (42,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (43,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (44,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (45,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (45,1);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (46,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (46,1);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (46,6);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (47,8);
+
+INSERT INTO book_genre_table(book_id, genre_id) VALUES (48,8);
+
+
+
+

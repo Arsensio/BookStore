@@ -43,6 +43,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MyError(exception.getMessage(),LocalDateTime.now()));
     }
 
+    @ExceptionHandler(value = ChangeSomeoneResourceExcetion.class)
+    protected ResponseEntity<Object>handleChangeSomeoneResourceException(ChangeSomeoneResourceExcetion exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(exception.getMessage(),LocalDateTime.now()));
+    }
+
 
 
 }

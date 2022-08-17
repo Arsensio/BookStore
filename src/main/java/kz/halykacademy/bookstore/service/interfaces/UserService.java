@@ -101,6 +101,7 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updatePassword(UserDetails userDetails, SaveUserDTO saveUserDTO) {
+
         UserEntity user = userRepository.findByUsernameIgnoreCase(userDetails.getUsername()).get();
 
         userRepository.save(

@@ -2,12 +2,10 @@ package kz.halykacademy.bookstore.service.interfaces;
 
 import kz.halykacademy.bookstore.exceptions.ResourceNotFoundException;
 import kz.halykacademy.bookstore.models.AuthorEntity;
-import kz.halykacademy.bookstore.models.BookEntity;
 import kz.halykacademy.bookstore.store.interfaces.AuthorRepository;
 import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
-import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +32,11 @@ public interface AuthorService {
 
     void delete(Long id);
 
-    AuthorDTO update(Long id,SaveAuthorDTO saveAuthor);
+    AuthorDTO update(Long id, SaveAuthorDTO saveAuthor);
 
     LinkedHashSet<AuthorDTO> findAllByGenre(List<Long> ids);
 
-    List<AuthorDTO> findAllByFullName(String name) ;
+    List<AuthorDTO> findAllByFullName(String name);
 }
 
 @Service
@@ -97,7 +95,7 @@ class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO update(Long id,SaveAuthorDTO saveAuthor) {
+    public AuthorDTO update(Long id, SaveAuthorDTO saveAuthor) {
         repository.findById(id).ifPresent(authorEntity -> {
             authorEntity.setFirstName(saveAuthor.getFirstName());
             authorEntity.setLastName(saveAuthor.getLastName());
@@ -118,16 +116,16 @@ class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorDTO> findAllByFullName(String name) {
-        String[]fio = name.split(" ");
+        String[] fio = name.split(" ");
         List<AuthorDTO> authorFound = new ArrayList<>();
 
         if (fio.length == 1) {
             authorFound.addAll(repository.findByOneArg(fio[0]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
-        }else if (fio.length == 2){
-            authorFound.addAll(repository.findByTwoArg(fio[0],fio[1]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
-        }else if (fio.length ==3){
-            authorFound.addAll(repository.findByThreeArg(fio[0],fio[1],fio[2]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
-        }else {
+        } else if (fio.length == 2) {
+            authorFound.addAll(repository.findByTwoArg(fio[0], fio[1]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+        } else if (fio.length == 3) {
+            authorFound.addAll(repository.findByThreeArg(fio[0], fio[1], fio[2]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+        } else {
             return authorFound;
         }
         return authorFound;

@@ -5,6 +5,7 @@ import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -38,7 +39,7 @@ public class AuthorEntity {
     private LocalDate dateOfBirth;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "authors",cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)
     private List<BookEntity> books;
 
     @CreationTimestamp
@@ -62,7 +63,7 @@ public class AuthorEntity {
         List<BookDTO> books = List.of();
         LinkedHashSet<String> genres = new LinkedHashSet<>();
 
-        if (this.books != null){
+        if (this.books != null) {
             books = this.books.stream().map(BookEntity::toDto).toList();
             genres = getGenres();
         }
@@ -75,7 +76,7 @@ public class AuthorEntity {
                 this.patronymic,
                 this.dateOfBirth,
                 books,
-                this.firstName+" "+this.lastName+" "+ this.patronymic,
+                this.firstName + " " + this.lastName + " " + this.patronymic,
                 genres
 
         );
@@ -84,13 +85,13 @@ public class AuthorEntity {
     private LinkedHashSet<String> getGenres() {
         LinkedHashSet<String> genresNames = new LinkedHashSet<>();
         this.books.forEach(book -> {
-           genresNames.addAll(book.getGenresName());
+            genresNames.addAll(book.getGenresName());
         });
         return genresNames;
     }
 
-    public String getFullName(){
-        return this.firstName+" "+this.lastName+" "+this.patronymic;
+    public String getFullName() {
+        return this.firstName + " " + this.lastName + " " + this.patronymic;
     }
 }
 

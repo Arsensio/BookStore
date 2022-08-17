@@ -22,7 +22,7 @@ public interface PublisherService {
 
     PublisherDTO save(SavePublisherDTO savePublisherDTO);
 
-    PublisherDTO update(Long id,SavePublisherDTO savePublisherDTO);
+    PublisherDTO update(Long id, SavePublisherDTO savePublisherDTO);
 
     void delete(Long id);
 }
@@ -70,7 +70,7 @@ class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    public PublisherDTO update(Long id,SavePublisherDTO savePublisherDTO) {
+    public PublisherDTO update(Long id, SavePublisherDTO savePublisherDTO) {
         repository.findById(id).ifPresentOrElse(it -> {
             it.setName(savePublisherDTO.getName());
             repository.saveAndFlush(it);

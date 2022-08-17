@@ -66,9 +66,8 @@ public class BookEntity {
     List<GenreEntity> genres;
 
 
-
     @JsonIgnore
-    @OneToMany(mappedBy = "book",cascade =CascadeType.MERGE)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.MERGE)
     List<OrderBookEntity> orders = new ArrayList<>();
 
 
@@ -90,7 +89,7 @@ public class BookEntity {
         List<Long> authorIdsList = List.of();
         if (this.authors != null) {
             authorDTOList = this.authors.stream().map(AuthorEntity::getFullName).toList();
-            authorIdsList =this.authors.stream().map(AuthorEntity::getId).toList();
+            authorIdsList = this.authors.stream().map(AuthorEntity::getId).toList();
         }
 
         String publisherName = "";
@@ -118,10 +117,11 @@ public class BookEntity {
 
     }
 
-    public List<String>getGenresName(){
+    public List<String> getGenresName() {
         return this.genres.stream().map(GenreEntity::getName).collect(Collectors.toList());
     }
-    public List<Long>getGenresIds(){
+
+    public List<Long> getGenresIds() {
         return this.genres.stream().map(GenreEntity::getId).collect(Collectors.toList());
     }
 

@@ -29,11 +29,10 @@ public class CartEntity {
     private BookEntity book;
 
 
-
     @Column(name = "quantity")
     private Long quantity;
 
-    public CartDTO toDTO(){
+    public CartDTO toDTO() {
         return new CartDTO(
                 this.id,
                 this.userId,
