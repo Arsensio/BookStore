@@ -93,7 +93,7 @@ INSERT INTO author_book_table(book_id, author_id) VALUES (26,40);
 INSERT INTO author_book_table(book_id, author_id) VALUES (26,42);
 
 -- 30
-INSERT INTO author_book_table(book_id, author_id) VALUES (26,42);
+INSERT INTO author_book_table(book_id, author_id) VALUES (26,41);
 
 -- 31
 INSERT INTO author_book_table(book_id, author_id) VALUES (27,38);

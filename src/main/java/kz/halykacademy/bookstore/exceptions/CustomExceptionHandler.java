@@ -48,6 +48,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MyError(exception.getMessage(),LocalDateTime.now()));
     }
 
+    @ExceptionHandler(value = UsernameAlreadyExistException.class)
+    protected ResponseEntity<Object>handleUsernameAlreadyExistException(UsernameAlreadyExistException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MyError(exception.getMessage(),LocalDateTime.now()));
+    }
+
 
 
 }

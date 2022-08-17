@@ -1,5 +1,6 @@
 package kz.halykacademy.bookstore.service.interfaces;
 
+import kz.halykacademy.bookstore.exceptions.UsernameAlreadyExistException;
 import kz.halykacademy.bookstore.models.UserEntity;
 import kz.halykacademy.bookstore.store.interfaces.UserRepository;
 import kz.halykacademy.bookstore.web.user.SaveUserDTO;
@@ -69,6 +70,8 @@ class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO save(SaveUserDTO saveUserDTO) {
+        if (userRepository.findByUsernameIgnoreCase(saveUserDTO.getUsername()).isPresent())
+            throw new UsernameAlreadyExistException("Username already exist");
 
         UserEntity saved = userRepository.save(
                 new UserEntity(saveUserDTO.getUsername(), encoder.encode(saveUserDTO.getPassword()), "USER", false)
