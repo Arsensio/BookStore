@@ -125,6 +125,11 @@ public class BookEntity {
         return this.genres.stream().map(GenreEntity::getId).collect(Collectors.toList());
     }
 
+    public void removeAuthor(AuthorEntity authorEntity) {
+        authors.remove(authorEntity);
+    }
+
+
     @Override
     public String toString() {
         return "BookEntity{" +

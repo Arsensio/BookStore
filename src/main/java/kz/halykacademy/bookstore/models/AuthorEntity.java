@@ -39,7 +39,7 @@ public class AuthorEntity {
     private LocalDate dateOfBirth;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "authors", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "authors", cascade = CascadeType.MERGE)
     private List<BookEntity> books;
 
     @CreationTimestamp

@@ -105,8 +105,7 @@ class BookServiceImpl implements BookService {
     }
 
     public List<AuthorEntity> getAuthors(LinkedHashSet<Long> ids) {
-        List<AuthorEntity> authorEntities = new ArrayList<>();
-        authorEntities.addAll(authorRepository.findAllByIdIn(ids).stream().toList());
+        List<AuthorEntity> authorEntities = new ArrayList<>(authorRepository.findAllByIdIn(ids).stream().toList());
         return authorEntities;
     }
 
@@ -143,8 +142,7 @@ class BookServiceImpl implements BookService {
             List<BookDTO> bookFound = repository.findAll(PageRequest.of(0, 20)).stream().map(BookEntity::toDto).collect(Collectors.toList());
             return bookFound.stream().collect(Collectors.toCollection(LinkedHashSet::new));
         }
-        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>();
-        booksFound.addAll(repository.findAllByGenres_IdIn(ids).stream().collect(Collectors.toList()));
+        LinkedHashSet<BookEntity> booksFound = new LinkedHashSet<>(new ArrayList<>(repository.findAllByGenres_IdIn(ids)));
 
         //sort by intersection
         LinkedHashMap<BookEntity, Integer> map = new LinkedHashMap<>();

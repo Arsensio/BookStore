@@ -2,19 +2,20 @@ package kz.halykacademy.bookstore.service.interfaces;
 
 import kz.halykacademy.bookstore.exceptions.ResourceNotFoundException;
 import kz.halykacademy.bookstore.models.AuthorEntity;
+import kz.halykacademy.bookstore.models.BookEntity;
 import kz.halykacademy.bookstore.store.interfaces.AuthorRepository;
 import kz.halykacademy.bookstore.store.interfaces.BookRepository;
 import kz.halykacademy.bookstore.web.author.AuthorDTO;
 import kz.halykacademy.bookstore.web.author.SaveAuthorDTO;
+import kz.halykacademy.bookstore.web.book.BookDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -91,6 +92,17 @@ class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void delete(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("Author not found. Invalid id supplied!");
+        }
+
+        AuthorEntity author = repository.findById(id).get();
+
+        for (BookEntity book : author.getBooks()) {
+            book.removeAuthor(author);
+        }
+        author.getBooks().clear();
+        repository.save(author);
         repository.deleteById(id);
     }
 
@@ -109,9 +121,31 @@ class AuthorServiceImpl implements AuthorService {
 
     @Override
     public LinkedHashSet<AuthorDTO> findAllByGenre(List<Long> ids) {
-        LinkedHashSet<AuthorDTO> authorFound = new LinkedHashSet<>();
-        authorFound.addAll(repository.findAllByBooks_Genres_IdIn(ids).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
-        return authorFound;
+        LinkedHashSet<AuthorEntity> authorFound = new LinkedHashSet<>(repository.findAllByBooks_Genres_IdIn(ids).stream().toList());
+
+        HashMap<AuthorEntity, Integer> map = new HashMap<>();
+
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+
+        authorFound.forEach(authorEntity -> {
+            LinkedHashSet<Long> genres = new LinkedHashSet<>(authorEntity.getBooks().stream().map(BookEntity::getGenresIds).flatMap(Collection::stream).toList());
+
+            ids.forEach(id -> {
+                if (genres.contains(id))
+                    atomicInteger.incrementAndGet();
+            });
+            map.put(authorEntity, atomicInteger.get());
+        });
+
+
+        LinkedHashSet<AuthorDTO> sorted = new LinkedHashSet<>();
+
+        map.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .forEachOrdered(x -> sorted.add(x.getKey().toDto()));
+
+        return sorted;
     }
 
     @Override
@@ -120,11 +154,11 @@ class AuthorServiceImpl implements AuthorService {
         List<AuthorDTO> authorFound = new ArrayList<>();
 
         if (fio.length == 1) {
-            authorFound.addAll(repository.findByOneArg(fio[0]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+            authorFound.addAll(repository.findByOneArg(fio[0]).stream().map(AuthorEntity::toDto).toList());
         } else if (fio.length == 2) {
-            authorFound.addAll(repository.findByTwoArg(fio[0], fio[1]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+            authorFound.addAll(repository.findByTwoArg(fio[0], fio[1]).stream().map(AuthorEntity::toDto).toList());
         } else if (fio.length == 3) {
-            authorFound.addAll(repository.findByThreeArg(fio[0], fio[1], fio[2]).stream().map(AuthorEntity::toDto).collect(Collectors.toList()));
+            authorFound.addAll(repository.findByThreeArg(fio[0], fio[1], fio[2]).stream().map(AuthorEntity::toDto).toList());
         } else {
             return authorFound;
         }

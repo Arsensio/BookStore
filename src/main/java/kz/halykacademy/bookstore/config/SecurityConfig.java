@@ -45,7 +45,7 @@ public class SecurityConfig {
 //                .antMatchers("/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/users").permitAll()
                 .antMatchers(HttpMethod.GET, "/books/**", "/authors/**", "/publishers/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/admin/**", "/orders/admin/orders", "/genres/**").hasAuthority("ADMIN")
+                .antMatchers(   HttpMethod.GET, "/users/admin/**", "/orders/admin/orders", "/genres/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/authors/**", "/publishers/**", "/books/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/authors/**", "/publishers/**", "/books/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/orders/update/admin/{id}", "/users/update/admin/{id}", "/users/update/admin/role", "/books/update/**").hasAuthority("ADMIN")
